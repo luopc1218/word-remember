@@ -1,8 +1,9 @@
 import styles from './index.less';
-import { useHistory, Link } from 'umi';
-import { Button, Affix } from 'antd';
+import { Link } from 'umi';
+import { Button } from 'antd';
 
-export const LayoutContainer = ({ children }) => {
+export const LayoutContainer = (props) => {
+  const { children } = props;
   return (
     <div className={styles.layoutContainer}>
       <Link to="/">

@@ -1,11 +1,12 @@
 import { useUrlParams } from '@/hooks';
 import styles from './index.less';
-import { Divider, Space, Input, Button, Table } from 'antd';
-import { useCallback, useMemo, useState } from 'react';
+import { Divider, Space, Input, Button } from 'antd';
+import { useMemo, useState } from 'react';
 import { connect, Link } from 'umi';
 import type { LexiconsModelState } from '@/models/lexicons';
-import type { Lexicon, Word } from '@/types/lexcion';
+import type { Lexicon } from '@/types/lexcion';
 import _ from 'lodash';
+import { Reault } from './components';
 
 export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
   temporary: state.lexicons.temporary,
@@ -13,6 +14,8 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
   const { temporary } = props;
   const [urlParams] = useUrlParams();
   const { lexiconId, type, shuffle } = urlParams;
+
+  const isWordToMeaning = useMemo<boolean>(() => type === '1', [type]);
 
   const currentLexicon = useMemo<Lexicon>(() => {
     if (lexiconId === '0') {
@@ -36,17 +39,12 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
 
   const [finished, setFinished] = useState<boolean>(false);
 
-  const refresh = useCallback(() => {
-    setAnswers(new Array(wordList.length).fill(''));
-    setFinished(false);
-  }, [wordList]);
-
   return (
     <div className={styles.paper}>
       <Divider>
         <Space>
           <div>词库id：{lexiconId}</div>
-          <div>模式：{type === '1' ? '英译中' : '中译英'}</div>
+          <div>模式：{isWordToMeaning ? '英译中' : '中译英'}</div>
           <div>单词数：{wordList.length}</div>
         </Space>
       </Divider>
@@ -55,7 +53,7 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
           {wordList.map((word, index) => (
             <div key={word.phonetic} className={styles.wordItem}>
               <div className={styles.word}>
-                {type === '1' ? (
+                {isWordToMeaning ? (
                   <span>{word.word}</span>
                 ) : (
                   <Input
@@ -71,7 +69,7 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
                 )}
               </div>
               <div className={styles.meaning}>
-                {type === '1' ? (
+                {isWordToMeaning ? (
                   <Input
                     value={answers[index]}
                     onChange={(e) => {
@@ -90,47 +88,19 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
           ))}
         </div>
       ) : (
-        <div className={styles.results}>
-          <Table
-            dataSource={wordList}
-            columns={[
-              { title: '原题', dataIndex: type === '1' ? 'word' : 'meaning' },
-              {
-                title: '我的答案',
-                render(row, table, index) {
-                  return answers[index];
-                },
-              },
-              {
-                title: '正确答案',
-                dataIndex: type === '1' ? 'meaning' : 'word',
-              },
-              ...(type === '1'
-                ? []
-                : [
-                    {
-                      title: '是否正确',
-                      render(row: Word, table: Word, index: number) {
-                        return <div>
-                          {answers[index] === row.word?'正确':'错误'}
-                        </div>;
-                      },
-                    },
-                  ]),
-            ]}
-          />
-        </div>
+        <Reault
+          isWordToMeaning={isWordToMeaning}
+          wordList={wordList}
+          answers={answers}
+        />
       )}
-      <Space>
+      <Space style={{ margin: 50 }}>
         {finished ? (
-          <Button
-            size="large"
-            shape="round"
-            type="primary"
-            onClick={() => refresh()}
-          >
-            重新开始
-          </Button>
+          <Link to={`/practice/modeSelect?lexiconId=${lexiconId}`}>
+            <Button size="large" shape="round" type="primary">
+              重新开始
+            </Button>
+          </Link>
         ) : (
           <Button
             size="large"

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Modal, Input } from 'antd';
-import { Word } from '@/types/lexcion';
+import type { Word } from '@/types/lexcion';
 import { connect } from 'umi';
 
 export const WordImporter = connect(null, (dispatch) => {

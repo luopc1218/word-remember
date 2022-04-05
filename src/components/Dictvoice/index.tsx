@@ -1,18 +1,33 @@
 import { playWordVoice } from '@/tools';
-import { SoundOutlined } from '@ant-design/icons'
+import { SoundOutlined } from '@ant-design/icons';
+import { Space } from 'antd';
 
 interface DictvoiceProps {
-  word: string
+  word: string;
 }
 
 export const Dictvoice = (props: DictvoiceProps) => {
-  const { word } = props
+  const { word } = props;
 
   const handlePlayVoice = () => {
-    playWordVoice(word)
-  }
+    playWordVoice(word);
+  };
 
-  return <SoundOutlined onClick={handlePlayVoice} />
+  return <SoundOutlined onClick={handlePlayVoice} />;
+};
+
+interface WordRenderProps {
+  word: string;
+}
+
+export const WordRender = (props: WordRenderProps) => {
+  const { word } = props;
+  return (
+    <Space>
+      <span>{word}</span>
+      <Dictvoice word={word} />
+    </Space>
+  );
 };
 
 export default Dictvoice;

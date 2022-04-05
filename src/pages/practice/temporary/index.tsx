@@ -69,9 +69,9 @@ export const TemporaryPage = connect(
     [deleteWord],
   );
 
-  const handleClearTemporary = () => {
+  const handleClearTemporary = useCallback(() => {
     clearWords();
-  };
+  }, [clearWords]);
 
   const tableProps = useMemo<TableProps<NewWord>>(
     () => ({
@@ -196,7 +196,14 @@ export const TemporaryPage = connect(
         },
       ],
     }),
-    [handleConfirmNewWord, handleDeleteWord, newWord, temporary],
+    [
+      handleClearTemporary,
+      handleConfirmNewWord,
+      handleDeleteWord,
+      newWord,
+      temporary.title,
+      temporary.wordList,
+    ],
   );
 
   return (
@@ -204,7 +211,7 @@ export const TemporaryPage = connect(
       <Alert message="警告！清空浏览器缓存会导致临时词库丢失！" type="error" />
       <Table {...tableProps} />
       <Divider></Divider>
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', margin: 50 }}>
         <Link to={'/practice/modeSelect?lexiconId=0'}>
           <Button size="large" shape="round" type="primary">
             开始练习
