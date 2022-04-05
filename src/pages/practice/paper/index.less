@@ -1,2 +1,32 @@
 .paper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .wordList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    .wordItem {
+      display: flex;
+      align-items: center;
+      width: 33.3333%;
+      .word {
+        box-sizing: border-box;
+        // min-width: 300px;
+        width: 50%;
+        padding: 10px;
+        text-align: center;
+      }
+      .meaning {
+        box-sizing: border-box;
+        // min-width: 300px;
+        width: 50%;
+        padding: 10px;
+      }
+    }
+  }
+  .results {
+    width: 100%;
+  }
 }

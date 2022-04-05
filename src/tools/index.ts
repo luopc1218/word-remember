@@ -1,3 +1,4 @@
+
 export const playWordVoice = (word: string) => {
   const VOCIE_URL = 'http://dict.youdao.com/dictvoice?type=0&audio=';
   const vocie = new Audio(VOCIE_URL + word);
