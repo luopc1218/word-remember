@@ -4,13 +4,13 @@ import styles from './index.less';
 import { WordRender } from '@/components';
 import type { Word } from '@/types/lexcion';
 
-interface ReaultProps {
+interface ResultProps {
   isWordToMeaning: boolean;
   wordList: any[];
   answers: any[];
 }
 
-export const Reault = (props: ReaultProps) => {
+export const Result = (props: ResultProps) => {
   const { isWordToMeaning, wordList, answers } = props;
   const renderResult = useCallback<
     (title: string, answer: string) => JSX.Element
@@ -81,4 +81,4 @@ export const Reault = (props: ReaultProps) => {
   );
 };
 
-export default Reault;
+export default Result;
