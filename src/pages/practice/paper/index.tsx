@@ -6,7 +6,7 @@ import { connect, Link } from 'umi';
 import type { LexiconsModelState } from '@/models/lexicons';
 import type { Lexicon } from '@/types/lexcion';
 import _ from 'lodash';
-import { Reault } from './components';
+import { Result } from './components';
 
 export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
   temporary: state.lexicons.temporary,
@@ -88,7 +88,7 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
           ))}
         </div>
       ) : (
-        <Reault
+        <Result
           isWordToMeaning={isWordToMeaning}
           wordList={wordList}
           answers={answers}
