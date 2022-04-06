@@ -1,0 +1,9 @@
+FROM ubuntu
+
+RUN apt-get npm -y
+RUN npm install n -g
+RUN n lts
+RUN cd ~ & mkdir projects
+RUN git clone git@github.com:luopc1218/word-remember.git ~/projects/word-remember
+RUN cd ~/projects/word-remember
+RUN yarn
