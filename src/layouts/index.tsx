@@ -1,15 +1,12 @@
 import styles from './index.less';
-import { Link } from 'umi';
-import { Button } from 'antd';
+import { FixedMenu } from '@/components';
 
 export const LayoutContainer = (props) => {
   const { children } = props;
   return (
     <div className={styles.layoutContainer}>
-      <Link to="/">
-        <Button type="link">返回主页</Button>
-      </Link>
       {children}
+      <FixedMenu />
     </div>
   );
 };
