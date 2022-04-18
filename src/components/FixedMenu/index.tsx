@@ -18,12 +18,12 @@ export const FixedMenu = () => {
     },
     {
       title: '词库管理',
-      icon: 'icon-home',
+      icon: 'icon-cangku',
       path: '/lexicons',
     },
     {
-      title: '联系',
-      icon: 'icon-home',
+      title: '练习',
+      icon: 'icon-editor1',
       path: '/practice',
     },
   ];
@@ -31,9 +31,9 @@ export const FixedMenu = () => {
   return (
     <Space direction="vertical" className={styles.fixedMenu}>
       {fixedMenuList.map((item) => (
-        <Link to="/practice" key={item.path}>
+        <Link to={item.path} key={item.path}>
           <Tooltip placement="left" title={item.title}>
-            <Button shape="circle">
+            <Button size="large" shape="circle">
               <Iconfont type={item.icon} />
             </Button>
           </Tooltip>
