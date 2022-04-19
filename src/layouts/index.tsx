@@ -7,13 +7,14 @@ export const LayoutContainer: React.FC = (props) => {
   return (
     <Layout className={styles.layout}>
       <Header />
+
       <Layout.Content className={styles.content}>
-        <Breadcrumb>
+        <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>
             <a href="/">主页</a>
           </Breadcrumb.Item>
         </Breadcrumb>
-        {children}
+        <Layout className={styles.page}>{children}</Layout>
       </Layout.Content>
       <Footer />
     </Layout>
