@@ -1,29 +1,10 @@
 import type { Lexicon } from '@/types/lexcion';
-import type { EffectsCommandMap } from 'dva';
-import type { AnyAction, Reducer } from 'redux';
-
-export type Effect = (
-  action: AnyAction,
-  effects: EffectsCommandMap & {
-    select: <T>(func: (state: LexiconsModelState) => T) => T;
-  },
-) => void;
-export interface LexiconsModelState {
-  lexiconList: Lexicon[];
-  temporary: Lexicon;
-}
-export interface LexiconsModel {
-  namespace: string;
-  state: LexiconsModelState;
-  effects: Record<string, Effect>;
-  reducers: Record<string, Reducer<LexiconsModelState>>;
-}
+import type { Model, ModelMap } from './index';
 
 export interface LexiconsModelState {
   lexiconList: Lexicon[];
   temporary: Lexicon;
 }
-
 const localTemporary = localStorage.getItem('temporary');
 
 const defaultState = {
@@ -36,10 +17,11 @@ const defaultState = {
       },
 };
 
-export const lexiconsModel: LexiconsModel = {
+export const lexiconsModel: Model<LexiconsModelState> = {
   namespace: 'lexicons',
   state: defaultState,
   reducers: {
+    // 更新词库
     updateLexiconList(
       state: LexiconsModelState = { ...defaultState },
       { payload },
@@ -47,6 +29,7 @@ export const lexiconsModel: LexiconsModel = {
       state.lexiconList = payload.lexiconList;
       return state;
     },
+    // 更新临时词库
     updateTemporary(
       state: LexiconsModelState = { ...defaultState },
       { payload },
@@ -57,7 +40,8 @@ export const lexiconsModel: LexiconsModel = {
     },
   },
   effects: {
-    *getLexiconList({ payload }, { put }) {
+    // 获取词库列表
+    *updateLexiconList({ payload }, { put }) {
       yield put({
         type: 'updateLexiconList',
         payload: {
@@ -65,15 +49,14 @@ export const lexiconsModel: LexiconsModel = {
         },
       });
     },
+    // 导入单词到临时词库
     *importWordsToTemporary({ payload }, { put, select }) {
-      const { temporary } = yield select<{ lexicons: LexiconsModelState }>(
-        (state) => {
-          return state.lexicons;
-        },
-      );
+      const { temporary } = yield select((state: ModelMap) => {
+        return state.lexicons;
+      });
       const newTemporary = { ...temporary };
       newTemporary.wordList = newTemporary.wordList.concat(payload);
-      
+
       yield put({
         type: 'updateTemporary',
         payload: {
@@ -81,12 +64,11 @@ export const lexiconsModel: LexiconsModel = {
         },
       });
     },
+    // 添加新单词到临时词库
     *addNewWordToTemporary({ payload }, { put, select }) {
-      const { temporary } = yield select<{ lexicons: LexiconsModelState }>(
-        (state) => {
-          return state.lexicons;
-        },
-      );
+      const { temporary } = yield select((state: ModelMap) => {
+        return state.lexicons;
+      });
       const newTemporary = { ...temporary };
       newTemporary.wordList.push(payload);
       yield put({
@@ -96,12 +78,11 @@ export const lexiconsModel: LexiconsModel = {
         },
       });
     },
+    // 从临时词库删除单词
     *deleteWordFromTemporary({ payload }, { put, select }) {
-      const { temporary } = yield select<{ lexicons: LexiconsModelState }>(
-        (state) => {
-          return state.lexicons;
-        },
-      );
+      const { temporary } = yield select((state: ModelMap) => {
+        return state.lexicons;
+      });
       const newTemporary = { ...temporary };
       newTemporary.wordList.splice(payload, 1);
       yield put({
@@ -111,12 +92,11 @@ export const lexiconsModel: LexiconsModel = {
         },
       });
     },
-    *clearWordsFromTemporary({}, { put, select }) {
-      const { temporary } = yield select<{ lexicons: LexiconsModelState }>(
-        (state) => {
-          return state.lexicons;
-        },
-      );
+    // 清空临时词库
+    *cleanTemporary({}, { put, select }) {
+      const { temporary } = yield select((state: ModelMap) => {
+        return state.lexicons;
+      });
       const newTemporary = { ...temporary };
       newTemporary.wordList = [];
       yield put({

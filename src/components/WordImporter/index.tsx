@@ -1,18 +1,27 @@
+import type { PropsWithChildren } from 'react';
 import { useState, useCallback } from 'react';
 import { Modal, Input } from 'antd';
 import type { Word } from '@/types/lexcion';
-import { connect } from 'umi';
+import { connect } from 'dva';
 
-export const WordImporter = connect(null, (dispatch) => {
-  return {
-    importNewWords(wordList: Word[]) {
-      dispatch({
-        type: 'lexicons/importWordsToTemporary',
-        payload: wordList,
-      });
-    },
-  };
-})(({ children, importNewWords }) => {
+interface WordImporterMapDispatchToProps {
+  importNewWords: (wordList: Word[]) => void;
+}
+export interface WordImporterProps extends WordImporterMapDispatchToProps {}
+
+export const WordImporter = connect<{}, WordImporterMapDispatchToProps>(
+  null,
+  (dispatch) => {
+    return {
+      importNewWords(wordList: Word[]) {
+        dispatch({
+          type: 'lexicons/importWordsToTemporary',
+          payload: wordList,
+        });
+      },
+    };
+  },
+)(({ children, importNewWords }: PropsWithChildren<WordImporterProps>) => {
   const [importing, setImporting] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);

@@ -1,23 +1,25 @@
 import styles from './index.less';
 import { Header, Footer } from '@/components';
-import { Affix, Breadcrumb, Layout } from 'antd';
+import { Breadcrumb, Layout, ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
 
 export const LayoutContainer: React.FC = (props) => {
   const { children } = props;
   return (
-    <Layout className={styles.layout}>
-      <Header />
-
-      <Layout.Content className={styles.content}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>
-            <a href="/">主页</a>
-          </Breadcrumb.Item>
-        </Breadcrumb>
-        <Layout className={styles.page}>{children}</Layout>
-      </Layout.Content>
-      <Footer />
-    </Layout>
+    <ConfigProvider locale={zhCN}>
+      <Layout className={styles.layout}>
+        <Header />
+        <Layout.Content className={styles.content}>
+          {/* <Breadcrumb className={styles.breadcrumb}>
+            <Breadcrumb.Item>
+              <a href="/">主页</a>
+            </Breadcrumb.Item>
+          </Breadcrumb> */}
+          <Layout className={styles.page}>{children}</Layout>
+        </Layout.Content>
+        <Footer />
+      </Layout>
+    </ConfigProvider>
   );
 };
 

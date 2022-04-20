@@ -6,4 +6,8 @@ export default defineConfig({
   },
   fastRefresh: {},
   mfsu: {},
+  dva: {
+    immer: true,
+    hmr: false,
+  },
 });

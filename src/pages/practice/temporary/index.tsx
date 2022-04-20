@@ -40,14 +40,12 @@ export const TemporaryPage = connect(
       },
       clearWords() {
         dispatch({
-          type: 'lexicons/clearWordsFromTemporary',
+          type: 'lexicons/cleanTemporary',
         });
       },
     };
   },
-)((props: TemporaryPageProps) => {
-  const { temporary, addNewWord, deleteWord, clearWords } = props;
-
+)(({ temporary, addNewWord, deleteWord, clearWords }: TemporaryPageProps) => {
   const [newWord, setNewWord] = useState<NewWord>({
     word: '',
     phonetic: '',
