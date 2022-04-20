@@ -24,5 +24,5 @@ $ yarn start
 sudo docker build --force-rm -t word-remember:latest .
 
 # run docker 
-sudo docker run -dit -p 8001:8001 -v ./nginx.conf:/etc/nginx/nginx.conf --name word-remember word-remember:latest  
+docker run -d --rm -p 8001:80 --name word-remember word-remember
 ```
