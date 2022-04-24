@@ -1,7 +1,9 @@
 import type { Model } from './index';
-import { FormModal, SignInForm } from '@/components';
-import type { SignInFormData } from '@/components';
+import { FormModal, SignInForm, SignUpForm } from '@/components';
+import type { SignInFormData, SignUpFormData } from '@/components';
 import type { User } from '@/types/user';
+import request from '@/tools/request';
+import { apis } from '@/tools/apis';
 
 export interface UserModelState {
   userInfo: User | undefined;
@@ -14,35 +16,50 @@ export const userModel: Model<UserModelState> = {
   },
   reducers: {},
   effects: {
-    async openSignInForm() {
-      try {
-        const SignInFormData = await FormModal.open<SignInFormData>(
-          SignInForm,
-          {
-            title: null,
-            icon: null,
-            okText: '立即登录',
-            closable: true,
-          },
-          'signInForm',
-        );
-        console.log(SignInFormData);
-      } catch (error) {}
+    openSignInForm({}, { put }) {
+      console.log('openSignInForm');
+
+      FormModal.open<SignInFormData>(
+        SignInForm,
+        (SignInFormData) => {
+          return request(apis.signIn, SignInFormData);
+        },
+        (event) => {
+          switch (event) {
+            case 'signUp': {
+              put({
+                type: 'openSignUpForm',
+              });
+            }
+          }
+        },
+        {
+          title: null,
+          icon: null,
+          okText: '立即登录',
+          closable: true,
+        },
+        'signInForm',
+      );
     },
-    async openSignUpForm() {
-      try {
-        const SignUpFormData = await FormModal.open<SignInFormData>(
-          SignInForm,
-          {
-            title: null,
-            icon: null,
-            okText: '立即注册',
-            closable: true,
-          },
-          'signUpForm',
-        );
-        console.log(SignUpFormData);
-      } catch (error) {}
+    openSignUpForm() {
+      console.log('openSignUpForm');
+      FormModal.open<SignUpFormData>(
+        SignUpForm,
+        (signUpFormData) => {
+          return request(apis.signUp, signUpFormData);
+        },
+        (event) => {
+          console.log(event);
+        },
+        {
+          title: null,
+          icon: null,
+          okText: '立即注册',
+          closable: true,
+        },
+        'signUpForm',
+      );
     },
   },
 };

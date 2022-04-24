@@ -1,61 +1,68 @@
-import type { FormProps, ModalFuncProps, ModalProps, FormInstance } from 'antd';
+import type { FormProps, ModalFuncProps, FormInstance } from 'antd';
 import { Modal } from 'antd';
 import React from 'react';
 
-type FormComponentType<T = any> = React.FC<
-  FormProps<T> & {
-    formProps?: FormProps;
-  }
->;
-
+export interface FormComponentProps extends FormProps {
+  onEvent: (eventName: string) => void;
+  formProps?: FormProps & {
+    ref?: any;
+  };
+}
 interface FormModalProps {
-  FormComponent: FormComponentType;
-  modalProps: ModalProps;
+  FormComponent: React.FC;
+  modalProps?: ModalFuncProps;
 }
 
 // 表单式对话框
 export class FormModal extends React.Component<FormModalProps> {
-  /**
-   * 函数式创建FormModal
-   * @param FormComponent 表单组件
-   * @param modalProps Modal组件Props
-   * @param singleModalKey 唯一Modal的key，不需要唯一则不传
-   * @returns Promise，表单提交会reslove，modal关闭会reject
-   */
   static open<T>(
-    FormComponent: FormComponentType<T>,
+    FormComponent: React.FC<FormComponentProps>,
+    callback: (formData: T) => Promise<void>,
+    onEvent: (eventName: string) => void = () => {},
     modalProps?: ModalFuncProps,
     singleModalKey?: string | undefined,
   ) {
     const formRef = React.createRef<FormInstance>();
-
-    console.log(singleModalKey);
-
-    return new Promise<T>((resolve, reject) => {
-      const formProps = {
-        ref: formRef,
-        onFinish: (values: T) => {
-          resolve(values);
-        },
-      };
-
-      const modal = Modal.confirm({
-        ...modalProps,
-        content: <FormComponent formProps={formProps} />,
-        onOk() {
-          formRef?.current?.submit();
-        },
-        onCancel() {
-          if (!!singleModalKey) {
-            delete (window as any)[`formModal-${singleModalKey}`];
-          }
-          reject();
-        },
-      });
-      if (!!singleModalKey) {
-        (window as any)[`formModal-${singleModalKey}`] = modal;
-      }
+    const modal = Modal.confirm({
+      ...modalProps,
+      content: (
+        <FormComponent
+          onEvent={onEvent}
+          formProps={{
+            ref: formRef,
+          }}
+        />
+      ),
+      onOk() {
+        return new Promise<void>((reslove, reject) => {
+          formRef?.current
+            ?.validateFields()
+            .then((values) => {
+              callback(values)
+                .then(() => {
+                  reslove();
+                })
+                .catch((error) => {
+                  reject(error);
+                });
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        });
+      },
+      onCancel() {
+        if (!!singleModalKey) {
+          delete (window as any)[`formModal-${singleModalKey}`];
+        }
+      },
+      getContainer: document.getElementById('root-layout') || document.body,
     });
+
+    if (!!singleModalKey) {
+      (window as any)[`formModal-${singleModalKey}`] = modal;
+    }
+    return modal;
   }
 
   render() {

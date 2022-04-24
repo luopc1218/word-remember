@@ -1,12 +1,12 @@
-import type { FormProps } from 'antd';
 import { Form, Input, Button } from 'antd';
+import type { FormComponentProps } from '../FormModal';
 import styles from './index.less';
+export interface SignInFormData {}
 
-export interface SignInFormData {
-  formProps?: FormProps;
-}
-
-export const SignInForm: React.FC<SignInFormData> = ({ formProps }) => {
+export const SignInForm: React.FC<FormComponentProps> = ({
+  formProps,
+  onEvent,
+}) => {
   return (
     <div className={styles.signInForm}>
       <div className={styles.title}>欢迎登录单词记忆器</div>
@@ -27,7 +27,13 @@ export const SignInForm: React.FC<SignInFormData> = ({ formProps }) => {
         </Form.Item>
         <div className={styles.signUpText}>
           没有账号？
-          <Button type="link" className={styles.button}>
+          <Button
+            type="link"
+            className={styles.button}
+            onClick={() => {
+              onEvent('signUp');
+            }}
+          >
             前往注册
           </Button>
         </div>

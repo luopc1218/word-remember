@@ -1,22 +1,15 @@
 import { Layout, Button } from 'antd';
 import styles from './index.less';
-import { connect } from 'dva';
+import { useDispatch } from 'umi';
 import { Link } from 'umi';
 
-export interface HeaderDispatchToProps {
-  handleSignIn: () => void;
-}
-export interface HeaderProps extends HeaderDispatchToProps {}
-
-export const Header = connect<{}, HeaderDispatchToProps>(null, (dispatch) => {
-  return {
-    handleSignIn() {
-      dispatch({
-        type: 'user/openSignInForm',
-      });
-    },
+export const Header: React.FC = () => {
+  const dispatch = useDispatch();
+  const handleSignIn = () => {
+    dispatch({
+      type: 'user/openSignInForm',
+    });
   };
-})(({ handleSignIn }: HeaderProps) => {
   return (
     <Layout.Header className={styles.header}>
       <Link to="/" className={styles.logo}>
@@ -30,6 +23,6 @@ export const Header = connect<{}, HeaderDispatchToProps>(null, (dispatch) => {
       </div>
     </Layout.Header>
   );
-});
+};
 
 export default Header;

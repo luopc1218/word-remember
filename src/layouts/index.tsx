@@ -7,7 +7,7 @@ export const LayoutContainer: React.FC = (props) => {
   const { children } = props;
   return (
     <ConfigProvider locale={zhCN}>
-      <Layout className={styles.layout}>
+      <Layout className={styles.layout} id="root-layout">
         <Affix offsetTop={0}>
           <Header />
         </Affix>
