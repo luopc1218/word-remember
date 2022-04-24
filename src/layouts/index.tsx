@@ -1,10 +1,24 @@
 import styles from './index.less';
 import { Header, Footer } from '@/components';
-import { Affix, Layout, ConfigProvider } from 'antd';
+import { Affix, Layout, ConfigProvider, Modal } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
+import { useEffect } from 'react';
+
+declare global {
+  interface Window {
+    modal: any
+  }
+}
 
 export const LayoutContainer: React.FC = (props) => {
   const { children } = props;
+
+  const [modal, contextHolder] = Modal.useModal();
+
+  useEffect(() => {
+    window.modal = modal
+  }, [modal])
+
   return (
     <ConfigProvider locale={zhCN}>
       <Layout className={styles.layout} id="root-layout">
@@ -21,6 +35,7 @@ export const LayoutContainer: React.FC = (props) => {
         </Layout.Content>
         <Footer />
       </Layout>
+      {contextHolder}
     </ConfigProvider>
   );
 };

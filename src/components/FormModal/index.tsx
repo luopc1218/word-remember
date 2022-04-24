@@ -3,7 +3,6 @@ import { Modal } from 'antd';
 import React from 'react';
 
 export interface FormComponentProps extends FormProps {
-  onEvent: (eventName: string) => void;
   formProps?: FormProps & {
     ref?: any;
   };
@@ -18,21 +17,22 @@ export class FormModal extends React.Component<FormModalProps> {
   static open<T>(
     FormComponent: React.FC<FormComponentProps>,
     callback: (formData: T) => Promise<void>,
-    onEvent: (eventName: string) => void = () => {},
     modalProps?: ModalFuncProps,
     singleModalKey?: string | undefined,
   ) {
     const formRef = React.createRef<FormInstance>();
-    const modal = Modal.confirm({
+    // 为了获取context使用封装的modal
+    // 查看layout/index.tsx
+    const modal = window.modal?.confirm({
       ...modalProps,
       content: (
         <FormComponent
-          onEvent={onEvent}
           formProps={{
             ref: formRef,
           }}
         />
       ),
+      icon: null,
       onOk() {
         return new Promise<void>((reslove, reject) => {
           formRef?.current

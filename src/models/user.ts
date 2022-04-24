@@ -16,22 +16,12 @@ export const userModel: Model<UserModelState> = {
   },
   reducers: {},
   effects: {
-    openSignInForm({}, { put }) {
+    openSignInForm({ }, { }) {
       console.log('openSignInForm');
-
       FormModal.open<SignInFormData>(
         SignInForm,
         (SignInFormData) => {
           return request(apis.signIn, SignInFormData);
-        },
-        (event) => {
-          switch (event) {
-            case 'signUp': {
-              put({
-                type: 'openSignUpForm',
-              });
-            }
-          }
         },
         {
           title: null,
@@ -49,9 +39,7 @@ export const userModel: Model<UserModelState> = {
         (signUpFormData) => {
           return request(apis.signUp, signUpFormData);
         },
-        (event) => {
-          console.log(event);
-        },
+
         {
           title: null,
           icon: null,

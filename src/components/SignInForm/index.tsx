@@ -1,12 +1,20 @@
 import { Form, Input, Button } from 'antd';
 import type { FormComponentProps } from '../FormModal';
 import styles from './index.less';
-export interface SignInFormData {}
+import { useDispatch } from 'umi'
+
+export interface SignInFormData { }
 
 export const SignInForm: React.FC<FormComponentProps> = ({
   formProps,
-  onEvent,
 }) => {
+  const dispatch = useDispatch()
+  const handleSignUp = () => {
+    dispatch({
+      type: 'user/openSignUpForm'
+    })
+
+  }
   return (
     <div className={styles.signInForm}>
       <div className={styles.title}>欢迎登录单词记忆器</div>
@@ -30,9 +38,7 @@ export const SignInForm: React.FC<FormComponentProps> = ({
           <Button
             type="link"
             className={styles.button}
-            onClick={() => {
-              onEvent('signUp');
-            }}
+            onClick={handleSignUp}
           >
             前往注册
           </Button>
