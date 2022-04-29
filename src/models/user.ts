@@ -1,34 +1,77 @@
 import type { Model } from './index';
-import { FormModal, SignInForm, SignUpForm } from '@/components';
-import type { SignInFormData, SignUpFormData } from '@/components';
 import type { User } from '@/types/user';
 import { UserService } from '@/services/user';
 
 export interface UserModelState {
+  getUserInfoLoading: boolean;
   userInfo: User | undefined;
 }
 
 export const userModel: Model<UserModelState> = {
   namespace: 'user',
   state: {
+    getUserInfoLoading: true,
     userInfo: undefined,
   },
-  reducers: {},
-  effects: {
-    async *signIn({ payload }, { call, put }) {
-      const { SignInFormData, reslove, reject } = payload;
-      const asseccToken = yield call(UserService.signIn, SignInFormData);
-      yield put({
-        type: 'user/updateUserInfo',
-        payload: {
-          asseccToken,
-        },
-      });
-      yield call(reslove);
-    },
+  reducers: {
+    setUserInfo(state, payload) {
+      return { ...state, getUserInfoLoading: payload }
 
-    async updateUserInfo() {
-      const userInfo = await UserService.getUserInfo();
+    },
+    setGetUserInfoLoading(state, payload) {
+      return { ...state, userInfo: payload }
+    }
+  },
+  effects: {
+    *signIn({ payload }, { put }) {
+      const { signInFormData, reslove, reject } = payload;
+      try {
+        const asseccToken = yield UserService.signIn(signInFormData);
+        reslove();
+        yield put({
+          type: 'getUserInfo',
+          payload: {
+            asseccToken,
+          },
+        });
+      } catch (e) {
+        reject()
+      }
+    },
+    *signUp({ payload }) {
+      const { signUpFormData, reslove, reject } = payload;
+      try {
+        yield UserService.signUp(signUpFormData);
+        reslove();
+      } catch (e) {
+        reject()
+      }
+    },
+    *getUserInfo({ }, { put }) {
+      try {
+        yield put({
+          type: 'setGetUserInfoLoading',
+          payload: true
+        })
+        const userInfo = yield UserService.getUserInfo();
+        yield put({
+          type: 'setUserInfo',
+          payload: userInfo
+        })
+        yield put({
+          type: 'setGetUserInfoLoading',
+          payload: false
+        })
+      } catch (error) {
+        yield put({
+          type: 'setUserInfo',
+          payload: undefined
+        })
+        yield put({
+          type: 'setGetUserInfoLoading',
+          payload: false
+        })
+      }
     },
   },
 };

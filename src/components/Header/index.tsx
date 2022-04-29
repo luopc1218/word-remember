@@ -1,24 +1,38 @@
-import { Layout, Button } from 'antd';
+import { Layout, Button, Spin } from 'antd';
 import styles from './index.less';
-import { useDispatch } from 'umi';
+import type { UserModelState } from 'umi';
+import { useDispatch, connect } from 'umi';
 import { Link } from 'umi';
 import type { SignInFormData } from '../FormModal';
 import { FormModal, SignInForm } from '../FormModal';
+import type { ModelMap } from '@/models';
 
 
-export const Header: React.FC = () => {
+
+export interface MapStateToHeaderProps {
+  user: UserModelState
+}
+
+export type HeaderProps = MapStateToHeaderProps
+
+export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>((state) => ({
+  user: state.user
+}))((props: MapStateToHeaderProps) => {
+  const { user } = props;
   const dispatch = useDispatch();
 
 
   const openSignInForm = () => {
     FormModal.open<SignInFormData>(
       SignInForm,
-      (signInFormData, reslove, reject) => dispatch({
-        type: 'user/signIn',
-        payload: {
-          signInFormData, reslove, reject
-        }
-      }),
+      (signInFormData, reslove, reject) => {
+        dispatch({
+          type: 'user/signIn',
+          payload: {
+            signInFormData, reslove, reject
+          }
+        })
+      },
       {
         title: null,
         icon: null,
@@ -34,14 +48,14 @@ export const Header: React.FC = () => {
       <Link to="/" className={styles.logo}>
         单词记忆器
       </Link>
-      <div className={styles.navigator}></div>
+      <div className={styles.navigator} />
       <div className={styles.user}>
-        <Button type="link" onClick={openSignInForm}>
+        {user.getUserInfoLoading ? <Spin /> : user.userInfo ? <div>hi {user.userInfo.name}</div> : <Button type="link" onClick={openSignInForm}>
           请登录
-        </Button>
+        </Button>}
       </div>
     </Layout.Header>
   );
-};
+})
 
 export default Header;

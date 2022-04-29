@@ -25,5 +25,11 @@ export const UserService: Service = {
       md5Object(signUpFormDataWithoutCheckPassword, ['password']),
     );
     message.success('注册成功');
+    return true
   },
+  // 获取用户信息
+  async getUserInfo() {
+    const userInfo = await request(apis.getUserInfo);
+    return userInfo
+  }
 };

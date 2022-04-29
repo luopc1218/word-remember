@@ -15,16 +15,14 @@ export const SignInForm: React.FC<FormComponentProps> = ({ formProps }) => {
   const openSignUpForm = () => {
     FormModal.open<SignUpFormData>(
       SignUpForm,
-      (signUpFormData) => {
-        return new Promise((reslove, reject) => {
-          dispatch({
-            type: 'user/signUp',
-            payload: {
-              signUpFormData,
-              reslove,
-              reject,
-            },
-          });
+      (signUpFormData, reslove, reject) => {
+        dispatch({
+          type: 'user/signUp',
+          payload: {
+            signUpFormData,
+            reslove,
+            reject,
+          },
         });
       },
       {
