@@ -1,27 +1,49 @@
 import { Form, Input, Button } from 'antd';
-import type { FormComponentProps } from '../FormModal';
+import type { FormComponentProps, SignUpFormData } from '..';
+import { FormModal, SignUpForm } from '..';
 import styles from './index.less';
-import { useDispatch } from 'umi'
+import { useDispatch } from 'umi';
 
-export interface SignInFormData { }
+export interface SignInFormData {
+  name: string;
+  password: string;
+}
 
-export const SignInForm: React.FC<FormComponentProps> = ({
-  formProps,
-}) => {
-  const dispatch = useDispatch()
-  const handleSignUp = () => {
-    dispatch({
-      type: 'user/openSignUpForm'
-    })
+export const SignInForm: React.FC<FormComponentProps> = ({ formProps }) => {
+  const dispatch = useDispatch();
 
-  }
+  const openSignUpForm = () => {
+    FormModal.open<SignUpFormData>(
+      SignUpForm,
+      (signUpFormData) => {
+        return new Promise((reslove, reject) => {
+          dispatch({
+            type: 'user/signUp',
+            payload: {
+              signUpFormData,
+              reslove,
+              reject,
+            },
+          });
+        });
+      },
+      {
+        title: null,
+        icon: null,
+        okText: '立即注册',
+        closable: true,
+      },
+      'signUpForm',
+    );
+  };
+
   return (
     <div className={styles.signInForm}>
       <div className={styles.title}>欢迎登录单词记忆器</div>
       <Form {...formProps} labelCol={{ span: 6 }}>
         <Form.Item
           label="用户名"
-          name="username"
+          name="name"
           rules={[{ required: true, message: '请输入用户名!' }]}
         >
           <Input placeholder="请输入用户名" />
@@ -38,7 +60,7 @@ export const SignInForm: React.FC<FormComponentProps> = ({
           <Button
             type="link"
             className={styles.button}
-            onClick={handleSignUp}
+            onClick={openSignUpForm}
           >
             前往注册
           </Button>

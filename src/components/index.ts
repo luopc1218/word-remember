@@ -5,5 +5,4 @@ export * from './Iconfont';
 export * from './Header';
 export * from './Footer';
 export * from './FormModal';
-export * from './SignInForm';
-export * from './SignUpForm';
+export * from './FormModal/SignInForm';

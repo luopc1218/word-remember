@@ -22,9 +22,8 @@ const requestInterceptors = (
  * @param error Error对象
  * @returns Promise
  */
-const errorHandler = (error: Error): Promise<void> => {
+const errorHandler = (error: Error): void => {
   message.error(error.message);
-  return Promise.resolve();
 };
 
 /**
@@ -52,8 +51,12 @@ export const request = (
   params?: Record<string, any> | FormData,
 ): Promise<any> => {
   return new Promise((reslove, reject) => {
+    const accessToken: string = localStorage.getItem('accessToken') || '';
     const requestOptions: RequestOptionsInit = {
       method: api.method,
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
       skipErrorHandler: true,
     };
     if (api.method === 'GET') {
@@ -69,13 +72,12 @@ export const request = (
               reslove(resData);
             })
             .catch((error) => {
-              errorHandler(error).then(() => {
-                reject(error);
-              });
+              errorHandler(error);
+              reject(error);
             });
         })
         .catch((error) => {
-          message.error(error.message);
+          errorHandler(error);
           reject(error);
         });
     });

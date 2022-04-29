@@ -2,14 +2,33 @@ import { Layout, Button } from 'antd';
 import styles from './index.less';
 import { useDispatch } from 'umi';
 import { Link } from 'umi';
+import type { SignInFormData } from '../FormModal';
+import { FormModal, SignInForm } from '../FormModal';
+
 
 export const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const handleSignIn = () => {
-    dispatch({
-      type: 'user/openSignInForm',
-    });
+
+
+  const openSignInForm = () => {
+    FormModal.open<SignInFormData>(
+      SignInForm,
+      (signInFormData, reslove, reject) => dispatch({
+        type: 'user/signIn',
+        payload: {
+          signInFormData, reslove, reject
+        }
+      }),
+      {
+        title: null,
+        icon: null,
+        okText: '立即登录',
+        closable: true,
+      },
+      'signInForm',
+    );
   };
+
   return (
     <Layout.Header className={styles.header}>
       <Link to="/" className={styles.logo}>
@@ -17,7 +36,7 @@ export const Header: React.FC = () => {
       </Link>
       <div className={styles.navigator}></div>
       <div className={styles.user}>
-        <Button type="link" onClick={handleSignIn}>
+        <Button type="link" onClick={openSignInForm}>
           请登录
         </Button>
       </div>

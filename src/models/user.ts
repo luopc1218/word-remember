@@ -2,8 +2,7 @@ import type { Model } from './index';
 import { FormModal, SignInForm, SignUpForm } from '@/components';
 import type { SignInFormData, SignUpFormData } from '@/components';
 import type { User } from '@/types/user';
-import request from '@/tools/request';
-import { apis } from '@/tools/apis';
+import { UserService } from '@/services/user';
 
 export interface UserModelState {
   userInfo: User | undefined;
@@ -16,38 +15,20 @@ export const userModel: Model<UserModelState> = {
   },
   reducers: {},
   effects: {
-    openSignInForm({ }, { }) {
-      console.log('openSignInForm');
-      FormModal.open<SignInFormData>(
-        SignInForm,
-        (SignInFormData) => {
-          return request(apis.signIn, SignInFormData);
+    async *signIn({ payload }, { call, put }) {
+      const { SignInFormData, reslove, reject } = payload;
+      const asseccToken = yield call(UserService.signIn, SignInFormData);
+      yield put({
+        type: 'user/updateUserInfo',
+        payload: {
+          asseccToken,
         },
-        {
-          title: null,
-          icon: null,
-          okText: '立即登录',
-          closable: true,
-        },
-        'signInForm',
-      );
+      });
+      yield call(reslove);
     },
-    openSignUpForm() {
-      console.log('openSignUpForm');
-      FormModal.open<SignUpFormData>(
-        SignUpForm,
-        (signUpFormData) => {
-          return request(apis.signUp, signUpFormData);
-        },
 
-        {
-          title: null,
-          icon: null,
-          okText: '立即注册',
-          closable: true,
-        },
-        'signUpForm',
-      );
+    async updateUserInfo() {
+      const userInfo = await UserService.getUserInfo();
     },
   },
 };

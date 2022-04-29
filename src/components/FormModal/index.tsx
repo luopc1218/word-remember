@@ -1,10 +1,12 @@
 import type { FormProps, ModalFuncProps, FormInstance } from 'antd';
 import { Modal } from 'antd';
 import React from 'react';
+export * from './SignInForm';
+export * from './SignUpForm';
 
 export interface FormComponentProps extends FormProps {
-  formProps?: FormProps & {
-    ref?: any;
+  formProps: FormProps & {
+    ref: React.RefObject<FormInstance<any>>;
   };
 }
 interface FormModalProps {
@@ -16,7 +18,11 @@ interface FormModalProps {
 export class FormModal extends React.Component<FormModalProps> {
   static open<T>(
     FormComponent: React.FC<FormComponentProps>,
-    callback: (formData: T) => Promise<void>,
+    callback: (
+      formData: T,
+      reslove: (value: void | PromiseLike<void>) => void,
+      reject: (reason?: any) => void,
+    ) => void,
     modalProps?: ModalFuncProps,
     singleModalKey?: string | undefined,
   ) {
@@ -38,13 +44,7 @@ export class FormModal extends React.Component<FormModalProps> {
           formRef?.current
             ?.validateFields()
             .then((values) => {
-              callback(values)
-                .then(() => {
-                  reslove();
-                })
-                .catch((error) => {
-                  reject(error);
-                });
+              callback(values, reslove, reject);
             })
             .catch((error) => {
               reject(error);

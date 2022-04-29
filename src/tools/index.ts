@@ -1,3 +1,5 @@
+import md5 from 'js-md5';
+
 /**
  * 播放单词读音
  * @param word 单词
@@ -33,3 +35,24 @@ export const parseJsonToUrl = (obj: Record<string, any>): string =>
       return key + '=' + encodeURIComponent(obj[key]);
     })
     .join('&');
+
+/**
+ * 将对象部分字段md5加密
+ * @param obj 任意对象
+ * @param md5Fields 需要md5的字段
+ * @returns 转换后的对象
+ */
+export const md5Object = (
+  obj: Record<string, any>,
+  md5Fields: string[],
+): Record<string, any> => {
+  const newObj: Record<string, any> = {};
+  for (const key in obj) {
+    if (md5Fields.includes(key)) {
+      newObj[key] = md5(obj[key]);
+    } else {
+      newObj[key] = obj[key];
+    }
+  }
+  return newObj;
+};

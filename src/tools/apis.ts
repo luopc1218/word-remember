@@ -10,4 +10,10 @@ export const apis: Record<string, Api> = {
     url: '/api/user/signIn',
     method: 'POST',
   },
+  signUp: {
+    url: '/api/user/signUp',
+    method: 'POST',
+  },
 };
+
+export default apis;
