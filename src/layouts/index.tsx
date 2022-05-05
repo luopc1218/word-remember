@@ -2,22 +2,35 @@ import styles from './index.less';
 import { Header, Footer } from '@/components';
 import { Affix, Layout, ConfigProvider, Modal } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useDispatch } from 'umi';
 
 declare global {
   interface Window {
-    modal: any
+    modal: any;
   }
 }
 
 export const LayoutContainer: React.FC = (props) => {
   const { children } = props;
 
+  const dispatch = useDispatch();
+
   const [modal, contextHolder] = Modal.useModal();
 
+  const initApp = useCallback(() => {
+    window.modal = modal;
+    dispatch({
+      type: 'user/checkSignIn',
+    });
+    dispatch({
+      type: 'global/getSysConfig',
+    });
+  }, [dispatch, modal]);
+
   useEffect(() => {
-    window.modal = modal
-  }, [modal])
+    initApp();
+  }, [initApp]);
 
   return (
     <ConfigProvider locale={zhCN}>

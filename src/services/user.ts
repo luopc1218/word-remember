@@ -1,35 +1,40 @@
-import request from '@/tools/request';
-import apis from '@/tools/apis';
+import request from '@/utils/request';
+import apis from '@/utils/apis';
 import type { SignInFormData, SignUpFormData } from '@/components';
-import { md5Object } from '@/tools';
+import { md5Object } from '@/utils';
 import type { Service } from './index';
-import { message } from 'antd';
 
 export const UserService: Service = {
   // 登录
-  async signIn(signUpFormData: SignInFormData) {
+  async signIn(signUpFormData: SignInFormData): Promise<string> {
     const token = await request(
       apis.signIn,
       md5Object(signUpFormData, ['password']),
+      {
+        showSuccessMessage: true,
+      },
     );
     localStorage.setItem('accessToken', token);
-    message.success('登录成功');
     return token;
   },
   // 注册
-  async signUp(signUpFormData: SignUpFormData) {
+  async signUp(signUpFormData: SignUpFormData): Promise<boolean> {
     const { checkPassword, ...signUpFormDataWithoutCheckPassword } =
       signUpFormData;
     await request(
       apis.signUp,
       md5Object(signUpFormDataWithoutCheckPassword, ['password']),
+      {
+        showSuccessMessage: true,
+      },
     );
-    message.success('注册成功');
-    return true
+    return true;
   },
   // 获取用户信息
-  async getUserInfo() {
-    const userInfo = await request(apis.getUserInfo);
-    return userInfo
-  }
+  async checkSignIn(): Promise<any> {
+    const userInfo = await request(apis.checkSignIn, undefined, {
+      showErrorMessage: false,
+    });
+    return userInfo;
+  },
 };

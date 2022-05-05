@@ -1,4 +1,4 @@
-import { parseUrlToJson } from '@/tools';
+import { parseUrlToJson } from '@/utils';
 import { useCallback, useMemo } from 'react';
 import { useHistory } from 'umi';
 

@@ -7,20 +7,19 @@ import type { SignInFormData } from '../FormModal';
 import { FormModal, SignInForm } from '../FormModal';
 import type { ModelMap } from '@/models';
 
-
-
 export interface MapStateToHeaderProps {
-  user: UserModelState
+  user: UserModelState;
 }
 
-export type HeaderProps = MapStateToHeaderProps
+export type HeaderProps = MapStateToHeaderProps;
 
-export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>((state) => ({
-  user: state.user
-}))((props: MapStateToHeaderProps) => {
+export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>(
+  (state) => ({
+    user: state.user,
+  }),
+)((props: MapStateToHeaderProps) => {
   const { user } = props;
   const dispatch = useDispatch();
-
 
   const openSignInForm = () => {
     FormModal.open<SignInFormData>(
@@ -29,9 +28,11 @@ export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>((state) =
         dispatch({
           type: 'user/signIn',
           payload: {
-            signInFormData, reslove, reject
-          }
-        })
+            signInFormData,
+            reslove,
+            reject,
+          },
+        });
       },
       {
         title: null,
@@ -50,12 +51,18 @@ export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>((state) =
       </Link>
       <div className={styles.navigator} />
       <div className={styles.user}>
-        {user.getUserInfoLoading ? <Spin /> : user.userInfo ? <div>hi {user.userInfo.name}</div> : <Button type="link" onClick={openSignInForm}>
-          请登录
-        </Button>}
+        {user.checkSignInLoading ? (
+          <Spin />
+        ) : user.userInfo ? (
+          <div>hi {user.userInfo.name}</div>
+        ) : (
+          <Button type="link" onClick={openSignInForm}>
+            请登录
+          </Button>
+        )}
       </div>
     </Layout.Header>
   );
-})
+});
 
 export default Header;

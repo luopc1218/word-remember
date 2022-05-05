@@ -1,5 +1,6 @@
 import styles from './index.less';
 import { Link } from 'umi';
+import { usePage } from '@/hooks';
 
 interface Mode {
   modeName: string;
@@ -7,6 +8,7 @@ interface Mode {
 }
 
 export const IndexPage = () => {
+  usePage({ pagePath: [{ title: '主页', path: '/' }] });
   const modes: Mode[] = [
     {
       modeName: '词库管理',

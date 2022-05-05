@@ -1,4 +1,4 @@
-import { playWordVoice } from '@/tools';
+import { playWordVoice } from '@/utils';
 import { SoundOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 

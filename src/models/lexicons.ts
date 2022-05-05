@@ -22,7 +22,7 @@ export const lexiconsModel: Model<LexiconsModelState> = {
   state: defaultState,
   reducers: {
     // 更新词库
-    updateLexiconList(
+    setLexiconList(
       state: LexiconsModelState = { ...defaultState },
       { payload },
     ) {
@@ -30,10 +30,7 @@ export const lexiconsModel: Model<LexiconsModelState> = {
       return state;
     },
     // 更新临时词库
-    updateTemporary(
-      state: LexiconsModelState = { ...defaultState },
-      { payload },
-    ) {
+    setTemporary(state: LexiconsModelState = { ...defaultState }, { payload }) {
       localStorage.setItem('temporary', JSON.stringify(payload.temporary));
       state.temporary = payload.temporary;
       return state;
@@ -41,9 +38,9 @@ export const lexiconsModel: Model<LexiconsModelState> = {
   },
   effects: {
     // 获取词库列表
-    *updateLexiconList({ payload }, { put }) {
+    *setLexiconList({ payload }, { put }) {
       yield put({
-        type: 'updateLexiconList',
+        type: 'setLexiconList',
         payload: {
           lexiconList: payload,
         },
@@ -58,7 +55,7 @@ export const lexiconsModel: Model<LexiconsModelState> = {
       newTemporary.wordList = newTemporary.wordList.concat(payload);
 
       yield put({
-        type: 'updateTemporary',
+        type: 'setTemporary',
         payload: {
           temporary: newTemporary,
         },
@@ -72,7 +69,7 @@ export const lexiconsModel: Model<LexiconsModelState> = {
       const newTemporary = { ...temporary };
       newTemporary.wordList.push(payload);
       yield put({
-        type: 'updateTemporary',
+        type: 'setTemporary',
         payload: {
           temporary: newTemporary,
         },
@@ -86,7 +83,7 @@ export const lexiconsModel: Model<LexiconsModelState> = {
       const newTemporary = { ...temporary };
       newTemporary.wordList.splice(payload, 1);
       yield put({
-        type: 'updateTemporary',
+        type: 'setTemporary',
         payload: {
           temporary: newTemporary,
         },
@@ -100,7 +97,7 @@ export const lexiconsModel: Model<LexiconsModelState> = {
       const newTemporary = { ...temporary };
       newTemporary.wordList = [];
       yield put({
-        type: 'updateTemporary',
+        type: 'setTemporary',
         payload: {
           temporary: newTemporary,
         },

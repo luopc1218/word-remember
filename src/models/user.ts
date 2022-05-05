@@ -3,24 +3,23 @@ import type { User } from '@/types/user';
 import { UserService } from '@/services/user';
 
 export interface UserModelState {
-  getUserInfoLoading: boolean;
+  checkSignInLoading: boolean;
   userInfo: User | undefined;
 }
 
 export const userModel: Model<UserModelState> = {
   namespace: 'user',
   state: {
-    getUserInfoLoading: true,
+    checkSignInLoading: false,
     userInfo: undefined,
   },
   reducers: {
-    setUserInfo(state, payload) {
-      return { ...state, getUserInfoLoading: payload }
-
+    setUserInfo(state, { payload }) {
+      return { ...state, userInfo: payload };
     },
-    setGetUserInfoLoading(state, payload) {
-      return { ...state, userInfo: payload }
-    }
+    setCheckSignInLoading(state, { payload }) {
+      return { ...state, checkSignInLoading: payload };
+    },
   },
   effects: {
     *signIn({ payload }, { put }) {
@@ -29,13 +28,13 @@ export const userModel: Model<UserModelState> = {
         const asseccToken = yield UserService.signIn(signInFormData);
         reslove();
         yield put({
-          type: 'getUserInfo',
+          type: 'checkSignIn',
           payload: {
             asseccToken,
           },
         });
       } catch (e) {
-        reject()
+        reject();
       }
     },
     *signUp({ payload }) {
@@ -44,33 +43,34 @@ export const userModel: Model<UserModelState> = {
         yield UserService.signUp(signUpFormData);
         reslove();
       } catch (e) {
-        reject()
+        reject();
       }
     },
-    *getUserInfo({ }, { put }) {
+    *checkSignIn({}, { put }) {
       try {
         yield put({
-          type: 'setGetUserInfoLoading',
-          payload: true
-        })
-        const userInfo = yield UserService.getUserInfo();
+          type: 'setCheckSignInLoading',
+          payload: true,
+        });
+        const userInfo = yield UserService.checkSignIn();
+
         yield put({
           type: 'setUserInfo',
-          payload: userInfo
-        })
+          payload: userInfo,
+        });
         yield put({
-          type: 'setGetUserInfoLoading',
-          payload: false
-        })
+          type: 'setCheckSignInLoading',
+          payload: false,
+        });
       } catch (error) {
         yield put({
           type: 'setUserInfo',
-          payload: undefined
-        })
+          payload: undefined,
+        });
         yield put({
-          type: 'setGetUserInfoLoading',
-          payload: false
-        })
+          type: 'setCheckSignInLoading',
+          payload: false,
+        });
       }
     },
   },

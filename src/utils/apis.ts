@@ -14,10 +14,14 @@ export const apis: Record<string, Api> = {
     url: '/api/user/signUp',
     method: 'POST',
   },
-  getUserInfo: {
-    url: '/api/user/getUserInfo',
-    method: 'GET'
-  }
+  checkSignIn: {
+    url: '/api/user/checkSignIn',
+    method: 'GET',
+  },
+  getSysConfig: {
+    url: '/api/getSysConfig',
+    method: 'GET',
+  },
 };
 
 export default apis;

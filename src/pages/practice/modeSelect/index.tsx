@@ -1,5 +1,5 @@
 import { useUrlParams } from '@/hooks';
-import { parseJsonToUrl } from '@/tools';
+import { parseJsonToUrl } from '@/utils';
 import { Space, Button, Divider, Radio } from 'antd';
 import { Link } from 'umi';
 import { useState } from 'react';

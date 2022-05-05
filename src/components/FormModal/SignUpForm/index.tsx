@@ -2,7 +2,7 @@ import { Form, Input } from 'antd';
 import type { Rule } from 'antd/lib/form';
 import type { FormComponentProps } from '..';
 import styles from './index.less';
-import regExps from '@/tools/regExps';
+import regExps from '@/utils/regExps';
 
 export interface SignUpFormData {
   name: string;
