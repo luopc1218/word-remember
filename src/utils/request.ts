@@ -96,6 +96,7 @@ export const request = async (
   try {
     await requestInterceptors(api.url, requestOptions);
     const response = await baseRequest(api.url, requestOptions);
+    const responseData = await responseInterceptors(response);
     if (showSuccessMessage) {
       switch (showType) {
         case ShowType.byMessage: {
@@ -111,7 +112,6 @@ export const request = async (
         }
       }
     }
-    const responseData = await responseInterceptors(response);
     return Promise.resolve(responseData);
   } catch (error: any) {
     if (showErrorMessage) {

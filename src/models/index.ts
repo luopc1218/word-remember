@@ -38,7 +38,7 @@ export const globalModel: Model<GlobalModelState> = {
     },
   },
   effects: {
-    *setTitle({ payload }, { put, select }) {
+    *setTitle({}, { select }) {
       document.title = yield select((state: ModelMap) => {
         return (
           state.global?.sysConfig?.title +
@@ -59,7 +59,7 @@ export const globalModel: Model<GlobalModelState> = {
         type: 'global/setTitle',
       });
     },
-    *changePagePath({ payload }, { put, select }) {
+    *changePagePath({ payload }, { put }) {
       yield put({
         type: 'setPagePath',
         payload,

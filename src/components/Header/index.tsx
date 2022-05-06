@@ -1,4 +1,4 @@
-import { Layout, Button, Spin } from 'antd';
+import { Layout, Button, Spin, Space } from 'antd';
 import styles from './index.less';
 import type { UserModelState } from 'umi';
 import { useDispatch, connect } from 'umi';
@@ -6,12 +6,36 @@ import { Link } from 'umi';
 import type { SignInFormData } from '../FormModal';
 import { FormModal, SignInForm } from '../FormModal';
 import type { ModelMap } from '@/models';
+import { MoreOutlined } from '@ant-design/icons';
+import React from 'react';
+import type { User } from '@/types/user';
 
 export interface MapStateToHeaderProps {
   user: UserModelState;
 }
 
 export type HeaderProps = MapStateToHeaderProps;
+
+interface HeaderUserProps {
+  userInfo: User | undefined;
+  onSignIn: () => void;
+}
+
+const HeaderUser: React.FC<HeaderUserProps> = ({ userInfo, onSignIn }) => {
+  if (!userInfo) {
+    return (
+      <Button type="link" onClick={onSignIn}>
+        请登录
+      </Button>
+    );
+  }
+  return (
+    <Space align="center" className={styles.user}>
+      <div>hi {userInfo.name}</div>
+      <MoreOutlined className={styles.userInfoBtn} />
+    </Space>
+  );
+};
 
 export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>(
   (state) => ({
@@ -53,12 +77,8 @@ export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>(
       <div className={styles.user}>
         {user.checkSignInLoading ? (
           <Spin />
-        ) : user.userInfo ? (
-          <div>hi {user.userInfo.name}</div>
         ) : (
-          <Button type="link" onClick={openSignInForm}>
-            请登录
-          </Button>
+          <HeaderUser onSignIn={openSignInForm} userInfo={user.userInfo} />
         )}
       </div>
     </Layout.Header>
