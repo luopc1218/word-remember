@@ -11,9 +11,7 @@ declare global {
   }
 }
 
-export const LayoutContainer: React.FC = (props) => {
-  const { children } = props;
-
+export const LayoutContainer: React.FC = ({ children }) => {
   const dispatch = useDispatch();
 
   const [modal, contextHolder] = Modal.useModal();
@@ -44,7 +42,7 @@ export const LayoutContainer: React.FC = (props) => {
               <a href="/">主页</a>
             </Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className={styles.page}>{children}</div>
+          {children}
         </Layout.Content>
         <Footer />
       </Layout>

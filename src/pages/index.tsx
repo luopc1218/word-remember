@@ -21,7 +21,7 @@ export const IndexPage = () => {
   ];
 
   return (
-    <div className={styles.indexPage}>
+    <div className={`page ${styles.indexPage}`}>
       <h1>欢迎使用单词记忆器</h1>
       <div className={styles.indexPage.modeList}>
         {modes.map((item) => (

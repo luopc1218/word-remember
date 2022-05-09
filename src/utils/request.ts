@@ -1,5 +1,5 @@
 import type { Api } from './apis';
-import { request as baseRequest } from 'umi';
+import { request as baseRequest, getDvaApp } from 'umi';
 import type { RequestOptionsInit } from 'umi-request';
 import { message, notification } from 'antd';
 
@@ -44,6 +44,9 @@ const errorHandler = (res: ResponseBody): void => {
   switch (code) {
     case 401: {
       // 登陆失效
+      getDvaApp()._store.dispatch({
+        type: 'user/signOut',
+      });
       // console.log('登陆失效');
     }
   }
@@ -95,7 +98,9 @@ export const request = async (
   }
   try {
     await requestInterceptors(api.url, requestOptions);
-    const response = await baseRequest(api.url, requestOptions);
+    const response = await baseRequest(api.url, requestOptions).catch(() => {
+      throw new Error('网络错误，请稍后重试或联系管理员。');
+    });
     const responseData = await responseInterceptors(response);
     if (showSuccessMessage) {
       switch (showType) {
@@ -115,8 +120,6 @@ export const request = async (
     return Promise.resolve(responseData);
   } catch (error: any) {
     if (showErrorMessage) {
-      console.log(showType, ShowType.byNotification);
-
       switch (showType) {
         case ShowType.byMessage: {
           message.error(error.message);

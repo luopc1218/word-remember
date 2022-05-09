@@ -1,27 +1,31 @@
-import { Layout, Button, Spin, Space } from 'antd';
+import { Layout, Button, Spin, Space, Menu, Dropdown, Modal } from 'antd';
 import styles from './index.less';
 import type { UserModelState } from 'umi';
-import { useDispatch, connect } from 'umi';
+import { useDispatch, useSelector } from 'umi';
 import { Link } from 'umi';
 import type { SignInFormData } from '../FormModal';
 import { FormModal, SignInForm } from '../FormModal';
 import type { ModelMap } from '@/models';
 import { MoreOutlined } from '@ant-design/icons';
-import React from 'react';
 import type { User } from '@/types/user';
-
-export interface MapStateToHeaderProps {
-  user: UserModelState;
-}
-
-export type HeaderProps = MapStateToHeaderProps;
+import { Avatar } from '@/components';
 
 interface HeaderUserProps {
+  loading: boolean;
   userInfo: User | undefined;
   onSignIn: () => void;
 }
 
-const HeaderUser: React.FC<HeaderUserProps> = ({ userInfo, onSignIn }) => {
+const HeaderUser: React.FC<HeaderUserProps> = ({
+  loading,
+  userInfo,
+  onSignIn,
+}) => {
+  const dispatch = useDispatch();
+
+  if (loading) {
+    return <Spin />;
+  }
   if (!userInfo) {
     return (
       <Button type="link" onClick={onSignIn}>
@@ -29,22 +33,62 @@ const HeaderUser: React.FC<HeaderUserProps> = ({ userInfo, onSignIn }) => {
       </Button>
     );
   }
+
+  const handleSignOut = (): void => {
+    Modal.confirm({
+      type: 'warning',
+      content: '确定要注销当前用户吗?',
+      onOk() {
+        dispatch({
+          type: 'user/signOut',
+        });
+      },
+    });
+  };
+
+  const handleClickUserDropdown = ({ key }: { key: string }): void => {
+    switch (key) {
+      case 'signOut': {
+        handleSignOut();
+        break;
+      }
+    }
+  };
+
   return (
-    <Space align="center" className={styles.user}>
-      <div>hi {userInfo.name}</div>
-      <MoreOutlined className={styles.userInfoBtn} />
-    </Space>
+    <div className={styles.user}>
+      <Space align="center">
+        <Avatar user={userInfo} />
+        <span>hi {userInfo.name}</span>
+
+        <Dropdown
+          trigger={['click']}
+          overlay={
+            <Menu
+              onClick={handleClickUserDropdown}
+              items={[
+                { label: <Link to="/profile">个人信息</Link>, key: 'profile' },
+                {
+                  label: '注销',
+                  key: 'signOut',
+                  danger: true,
+                },
+              ]}
+            />
+          }
+        >
+          <MoreOutlined className={styles.userInfoBtn} />
+        </Dropdown>
+      </Space>
+    </div>
   );
 };
 
-export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>(
-  (state) => ({
-    user: state.user,
-  }),
-)((props: MapStateToHeaderProps) => {
-  const { user } = props;
+export const Header: React.FC = () => {
   const dispatch = useDispatch();
-
+  const userModelState = useSelector<ModelMap, UserModelState>((state) => {
+    return state.user;
+  });
   const openSignInForm = () => {
     FormModal.open<SignInFormData>(
       SignInForm,
@@ -74,15 +118,13 @@ export const Header = connect<MapStateToHeaderProps, {}, {}, ModelMap>(
         单词记忆器
       </Link>
       <div className={styles.navigator} />
-      <div className={styles.user}>
-        {user.checkSignInLoading ? (
-          <Spin />
-        ) : (
-          <HeaderUser onSignIn={openSignInForm} userInfo={user.userInfo} />
-        )}
-      </div>
+      <HeaderUser
+        loading={userModelState.checkSignInLoading}
+        onSignIn={openSignInForm}
+        userInfo={userModelState.userInfo}
+      />
     </Layout.Header>
   );
-});
+};
 
 export default Header;

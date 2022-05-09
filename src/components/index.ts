@@ -6,3 +6,4 @@ export * from './Header';
 export * from './Footer';
 export * from './FormModal';
 export * from './FormModal/SignInForm';
+export * from './Avatar';

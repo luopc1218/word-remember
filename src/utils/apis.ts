@@ -22,6 +22,10 @@ export const apis: Record<string, Api> = {
     url: '/api/getSysConfig',
     method: 'GET',
   },
+  uploadFile: {
+    url: '/file/upload',
+    method: 'POST',
+  },
 };
 
 export default apis;

@@ -20,6 +20,9 @@ export const userModel: Model<UserModelState> = {
     setCheckSignInLoading(state, { payload }) {
       return { ...state, checkSignInLoading: payload };
     },
+    clearUserInfo(state) {
+      return { ...state, userInfo: undefined };
+    },
   },
   effects: {
     *signIn({ payload }, { put }) {
@@ -72,6 +75,12 @@ export const userModel: Model<UserModelState> = {
           payload: false,
         });
       }
+    },
+    *signOut({}, { put }) {
+      yield put({
+        type: 'clearUserInfo',
+      });
+      localStorage.removeItem('accessToken');
     },
   },
 };
