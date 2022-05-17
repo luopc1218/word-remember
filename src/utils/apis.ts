@@ -23,7 +23,7 @@ export const apis: Record<string, Api> = {
     method: 'GET',
   },
   uploadFile: {
-    url: '/file/upload',
+    url: '/api/file/upload',
     method: 'POST',
   },
 };

@@ -4,7 +4,9 @@ import type { Service } from './index';
 
 export const fileService: Service = {
   async upload(file: File) {
-    const url = await request(apis.uploadFile, file);
+    const formData = new FormData();
+    formData.append('file', file);
+    const url = await request(apis.uploadFile, formData);
     return url;
   },
 };

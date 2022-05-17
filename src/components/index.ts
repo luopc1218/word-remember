@@ -7,3 +7,6 @@ export * from './Footer';
 export * from './FormModal';
 export * from './FormModal/SignInForm';
 export * from './Avatar';
+export * from './RemoteTable';
+export * from './UploadMask';
+export * from './Upload';

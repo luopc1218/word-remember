@@ -56,7 +56,7 @@ export const globalModel: Model<GlobalModelState> = {
         payload: sysConfig,
       });
       yield put({
-        type: 'global/setTitle',
+        type: 'setTitle',
       });
     },
     *changePagePath({ payload }, { put }) {
@@ -65,7 +65,7 @@ export const globalModel: Model<GlobalModelState> = {
         payload,
       });
       yield put({
-        type: 'global/setTitle',
+        type: 'setTitle',
       });
     },
   },

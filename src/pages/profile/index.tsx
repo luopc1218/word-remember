@@ -1,9 +1,9 @@
 import styles from './index.less';
-import { Descriptions, Space, Tabs, Table } from 'antd';
+import { Descriptions, Space, Tabs, Table, Button } from 'antd';
 import type { UserModelState } from 'umi';
 import { useSelector } from 'umi';
 import type { ModelMap } from '@/models';
-import { Avatar } from '@/components';
+import { Avatar, UploadMask } from '@/components';
 import { useMemo } from 'react';
 import { usePage } from '@/hooks';
 
@@ -17,11 +17,17 @@ export const ProfilePage = () => {
 
   if (!userInfo) return null;
   return (
-    <div className={styles.profilePage}>
-      <div className="page">
+    <Space direction="vertical" className={`page ${styles.profilePage}`}>
+      <div className={`module ${styles.summary}`}>
         <Space align="center">
           <Space direction="vertical" align="center">
-            <Avatar user={userModelState.userInfo} size={128} shape="square" />
+            <UploadMask>
+              <Avatar
+                user={userModelState.userInfo}
+                size={128}
+                shape="square"
+              />
+            </UploadMask>
           </Space>
           <Descriptions title={userInfo.name}>
             <Descriptions.Item label="电话">{userInfo.phone}</Descriptions.Item>
@@ -31,61 +37,64 @@ export const ProfilePage = () => {
           </Descriptions>
         </Space>
       </div>
-      <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="我的词库" key="lexicons">
-          <Table
-            bordered
-            dataSource={[]}
-            columns={[
-              {
-                title: '姓名',
-                dataIndex: 'name',
-                key: 'name',
-              },
-              {
-                title: '年龄',
-                dataIndex: 'age',
-                key: 'age',
-              },
-              {
-                title: '住址',
-                dataIndex: 'address',
-                key: 'address',
-              },
-            ]}
-          />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="我的练习" key="practice">
-          <Table
-            bordered
-            dataSource={[]}
-            columns={[
-              {
-                title: '题库',
-                dataIndex: 'name',
-                key: 'name',
-              },
-              {
-                title: '练习时间',
-                dataIndex: 'age',
-                key: 'age',
-              },
-              {
-                title: '分数',
-                dataIndex: 'address',
-                key: 'address',
-              },
-            ]}
-          />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="偏好设置" key="setting">
-          <div className="module">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro,
-            recusandae.
-          </div>
-        </Tabs.TabPane>
-      </Tabs>
-    </div>
+      <div className={`module ${styles.details}`}>
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane tab="我的词库" key="lexicons">
+            <Table
+              bordered
+              dataSource={[]}
+              columns={[
+                {
+                  title: '姓名',
+                  dataIndex: 'name',
+                  key: 'name',
+                },
+                {
+                  title: '年龄',
+                  dataIndex: 'age',
+                  key: 'age',
+                },
+                {
+                  title: '住址',
+                  dataIndex: 'address',
+                  key: 'address',
+                },
+              ]}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="我的练习" key="practice">
+            <Table
+              bordered
+              dataSource={[]}
+              columns={[
+                {
+                  title: '题库',
+                  dataIndex: 'name',
+                  key: 'name',
+                },
+                {
+                  title: '练习时间',
+                  dataIndex: 'age',
+                  key: 'age',
+                },
+                {
+                  title: '分数',
+                  dataIndex: 'address',
+                  key: 'address',
+                },
+              ]}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="偏好设置" key="setting">
+            <Space>
+              <Button>修改密码</Button>
+              <Button>修改手机号</Button>
+              <Button>修改电子邮箱</Button>
+            </Space>
+          </Tabs.TabPane>
+        </Tabs>
+      </div>
+    </Space>
   );
 };
 
