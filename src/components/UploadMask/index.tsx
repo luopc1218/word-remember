@@ -5,20 +5,39 @@ import { Space } from 'antd';
 import { Upload } from '@/components';
 
 interface UploadMaskProps {
-  mask: boolean;
-  title: string;
+  mask?: boolean;
+  title?: string;
+  onSuccess?: (url: string) => void;
 }
 
 export const UploadMask: React.FC<UploadMaskProps> = ({
   mask = true,
   title = '点击上传',
+  onSuccess,
   children,
 }) => {
   const [loading, setLoading] = useState(false);
 
   return (
     <div className={`${styles.uploadMask}`}>
-      <Upload disabled={loading} showUploadList={false}>
+      <Upload
+        maxCount={1}
+        disabled={loading}
+        showUploadList={false}
+        onChange={(e) => {
+          console.log(e);
+
+          const { status, response } = e.file;
+          if (status === 'uploading') {
+            setLoading(true);
+          } else {
+            setLoading(false);
+          }
+          if (status === 'done') {
+            onSuccess?.(response);
+          }
+        }}
+      >
         {loading && (
           <div className={styles.loading}>
             <Space align="center">

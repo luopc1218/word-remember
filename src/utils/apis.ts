@@ -18,12 +18,20 @@ export const apis: Record<string, Api> = {
     url: '/api/user/checkSignIn',
     method: 'GET',
   },
+  getUserInfo: {
+    url: '/api/user/getUserInfo',
+    method: 'GET',
+  },
   getSysConfig: {
     url: '/api/getSysConfig',
     method: 'GET',
   },
   uploadFile: {
     url: '/api/file/upload',
+    method: 'POST',
+  },
+  changeAvatar: {
+    url: '/api/user/changeAvatar',
     method: 'POST',
   },
 };

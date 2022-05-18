@@ -1,10 +1,11 @@
 import styles from './index.less';
 import { Descriptions, Space, Tabs, Table, Button } from 'antd';
 import type { UserModelState } from 'umi';
+import { useDispatch } from 'umi';
 import { useSelector } from 'umi';
 import type { ModelMap } from '@/models';
 import { Avatar, UploadMask } from '@/components';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { usePage } from '@/hooks';
 
 export const ProfilePage = () => {
@@ -12,16 +13,29 @@ export const ProfilePage = () => {
     (state) => state.user,
   );
 
+  const dispatch = useDispatch();
+
   const userInfo = useMemo(() => userModelState.userInfo, [userModelState]);
   usePage({ pagePath: [{ path: '/profile', title: '个人信息' }] });
 
+  const handleChangeAvatar = useCallback<(url: string) => void>(
+    (url) => {
+      dispatch({
+        type: 'user/changeAvatar',
+        payload: url,
+      });
+    },
+    [dispatch],
+  );
+
   if (!userInfo) return null;
+
   return (
     <Space direction="vertical" className={`page ${styles.profilePage}`}>
       <div className={`module ${styles.summary}`}>
         <Space align="center">
           <Space direction="vertical" align="center">
-            <UploadMask>
+            <UploadMask onSuccess={handleChangeAvatar}>
               <Avatar
                 user={userModelState.userInfo}
                 size={128}

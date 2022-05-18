@@ -6,7 +6,9 @@ export const fileService: Service = {
   async upload(file: File) {
     const formData = new FormData();
     formData.append('file', file);
-    const url = await request(apis.uploadFile, formData);
+    const url = await request(apis.uploadFile, formData, {
+      showErrorMessage: false,
+    });
     return url;
   },
 };

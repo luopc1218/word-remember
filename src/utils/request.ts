@@ -26,13 +26,12 @@ interface ResponseOptions {
  * @param requestOptions 请求设置
  * @returns Promise
  */
-const requestInterceptors = (
-  url: string,
-  requestOptions: RequestOptionsInit,
-): Promise<void> => {
-  console.log(url, requestOptions);
-  return Promise.resolve();
-};
+// const requestInterceptors = (
+//   url: string,
+//   requestOptions: RequestOptionsInit,
+// ): Promise<void> => {
+//   return Promise.resolve();
+// };
 
 /**
  * 错误处理程序
@@ -47,7 +46,6 @@ const errorHandler = (res: ResponseBody): void => {
       getDvaApp()._store.dispatch({
         type: 'user/signOut',
       });
-      // console.log('登陆失效');
     }
   }
 };
@@ -73,11 +71,11 @@ const responseInterceptors = (res: ResponseBody): Promise<any> => {
  * @param params 请求参数
  * @returns Promise
  */
-export const request = async (
+export const request = async <T = any>(
   api: Api,
   params?: Record<string, any> | FormData,
   responseOptions?: ResponseOptions,
-) => {
+): Promise<T> => {
   const {
     showErrorMessage = true,
     showSuccessMessage = false,
@@ -97,7 +95,7 @@ export const request = async (
     requestOptions.data = params;
   }
   try {
-    await requestInterceptors(api.url, requestOptions);
+    // await requestInterceptors(api.url, requestOptions);
     const response = await baseRequest(api.url, requestOptions).catch(() => {
       throw new Error('网络错误，请稍后重试或联系管理员。');
     });

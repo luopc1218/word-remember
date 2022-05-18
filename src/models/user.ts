@@ -55,7 +55,8 @@ export const userModel: Model<UserModelState> = {
           type: 'setCheckSignInLoading',
           payload: true,
         });
-        const userInfo = yield UserService.checkSignIn();
+        yield UserService.checkSignIn();
+        const userInfo = yield UserService.getUserInfo();
 
         yield put({
           type: 'setUserInfo',
@@ -81,6 +82,11 @@ export const userModel: Model<UserModelState> = {
         type: 'clearUserInfo',
       });
       localStorage.removeItem('accessToken');
+    },
+    *changeAvatar({ payload }) {
+      try {
+        yield UserService.changeAvatar(payload);
+      } catch (error) {}
     },
   },
 };
