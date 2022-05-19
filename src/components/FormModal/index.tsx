@@ -3,6 +3,7 @@ import { Modal } from 'antd';
 import React from 'react';
 export * from './SignInForm';
 export * from './SignUpForm';
+export * from './ChangePasswordForm';
 
 export interface FormComponentProps extends FormProps {
   formProps: FormProps & {

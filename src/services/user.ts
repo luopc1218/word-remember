@@ -7,7 +7,7 @@ import type { User } from '@/types/user';
 
 export const UserService: Service = {
   // 登录
-  async signIn(signUpFormData: SignInFormData): Promise<string> {
+  async signIn(signUpFormData: SignInFormData) {
     const token = await request<string>(
       apis.signIn,
       md5Object(signUpFormData, ['password']),
@@ -19,7 +19,7 @@ export const UserService: Service = {
     return token;
   },
   // 注册
-  async signUp(signUpFormData: SignUpFormData): Promise<boolean> {
+  async signUp(signUpFormData: SignUpFormData) {
     const { checkPassword, ...signUpFormDataWithoutCheckPassword } =
       signUpFormData;
     await request<boolean>(
@@ -32,7 +32,7 @@ export const UserService: Service = {
     return true;
   },
   // 检测是否登录
-  async checkSignIn(): Promise<boolean> {
+  async checkSignIn() {
     await request<boolean>(apis.checkSignIn, undefined, {
       showErrorMessage: false,
     });
@@ -44,8 +44,15 @@ export const UserService: Service = {
     return userInfo;
   },
   // 修改头像
-  async changeAvatar(avatarUrl): Promise<boolean> {
+  async changeAvatar(avatarUrl) {
     await request<boolean>(apis.changeAvatar, { url: avatarUrl });
+    return true;
+  },
+  async changePassword(changePasswordFormData) {
+    await request<boolean>(
+      apis.changePassword,
+      md5Object(changePasswordFormData, ['password', 'newPassword']),
+    );
     return true;
   },
 };

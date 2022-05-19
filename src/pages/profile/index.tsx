@@ -1,12 +1,23 @@
 import styles from './index.less';
-import { Descriptions, Space, Tabs, Table, Button, Spin } from 'antd';
+import {
+  Descriptions,
+  Space,
+  Tabs,
+  Table,
+  Button,
+  Spin,
+  Modal,
+  message,
+} from 'antd';
 import type { UserModelState } from 'umi';
 import { useDispatch } from 'umi';
 import { useSelector } from 'umi';
 import type { ModelMap } from '@/models';
-import { Avatar, UploadMask } from '@/components';
+import { Avatar, FormModal, UploadMask } from '@/components';
 import { useMemo, useCallback } from 'react';
 import { usePage } from '@/hooks';
+import type { ChangePasswordFormData } from '@/components/FormModal';
+import { ChangePasswordForm } from '@/components/FormModal';
 
 export const ProfilePage = () => {
   const userModelState = useSelector<ModelMap, UserModelState>(
@@ -21,6 +32,7 @@ export const ProfilePage = () => {
   );
   usePage({ pagePath: [{ path: '/profile', title: '个人信息' }] });
 
+  // 监听修改头像
   const handleChangeAvatar = useCallback<(url: string) => void>(
     (url) => {
       dispatch({
@@ -30,6 +42,42 @@ export const ProfilePage = () => {
     },
     [dispatch],
   );
+
+  // 监听修改密码
+  const handleChangePassword = useCallback(() => {
+    FormModal.open<ChangePasswordFormData>(
+      ChangePasswordForm,
+      (changePasswordFormData, reslove, reject) => {
+        Modal.confirm({
+          title: '确定修改密码?',
+          content: '修改后需要重新登陆',
+          type: 'warning',
+          onOk() {
+            dispatch({
+              type: 'user/changePassword',
+              payload: {
+                changePasswordFormData,
+                reslove,
+                reject,
+              },
+            });
+          },
+          onCancel() {
+            reject();
+          },
+        });
+      },
+    );
+  }, [dispatch]);
+
+  const handleChangePhone = useCallback(() => {
+    message.error('暂不支持');
+  }, []);
+
+  const handleChangeEmail = useCallback(() => {
+    message.error('暂不支持');
+  }, []);
+
   if (!userInfo) return null;
 
   return (
@@ -111,9 +159,9 @@ export const ProfilePage = () => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="偏好设置" key="setting">
               <Space>
-                <Button>修改密码</Button>
-                <Button>修改手机号</Button>
-                <Button>修改电子邮箱</Button>
+                <Button onClick={handleChangePassword}>修改密码</Button>
+                <Button onClick={handleChangePhone}>修改手机号</Button>
+                <Button onClick={handleChangeEmail}>修改电子邮箱</Button>
               </Space>
             </Tabs.TabPane>
           </Tabs>

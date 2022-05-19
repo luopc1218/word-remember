@@ -78,7 +78,7 @@ export const request = async <T = any>(
 ): Promise<T> => {
   const {
     showErrorMessage = true,
-    showSuccessMessage = false,
+    showSuccessMessage = api.method === 'POST',
     showType = ShowType.byMessage,
   } = responseOptions || {};
   const accessToken: string = localStorage.getItem('accessToken') || '';

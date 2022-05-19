@@ -104,6 +104,19 @@ export const userModel: Model<UserModelState> = {
         });
       } catch (error) {}
     },
+    *changePassword({ payload }, { put }) {
+      const { changePasswordFormData, reslove, reject } = payload;
+      const { password, newPassword } = changePasswordFormData;
+      try {
+        yield UserService.changePassword({ password, newPassword });
+        yield put({
+          type: 'signOut',
+        });
+        reslove();
+      } catch (error) {
+        reject(error);
+      }
+    },
   },
 };
 

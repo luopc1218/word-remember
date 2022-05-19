@@ -1,5 +1,4 @@
 import { Form, Input, Space, Avatar } from 'antd';
-import type { Rule } from 'antd/lib/form';
 import type { FormComponentProps } from '..';
 import styles from './index.less';
 import regExps from '@/utils/regExps';
@@ -28,14 +27,6 @@ const AvatarUploader = ({ onChange = () => {}, value = '' }) => {
 };
 
 export const SignUpForm: React.FC<FormComponentProps> = ({ formProps }) => {
-  const checkPasswordValidator: Rule = ({ getFieldValue }) => ({
-    validator(rule, value) {
-      if (!value || value === getFieldValue('password')) {
-        return Promise.resolve();
-      }
-      return Promise.reject('两次密码输入不一致');
-    },
-  });
   return (
     <div className={styles.signUpForm}>
       <div className={styles.title}>欢迎注册单词记忆器</div>
@@ -78,7 +69,14 @@ export const SignUpForm: React.FC<FormComponentProps> = ({ formProps }) => {
               required
               rules={[
                 { required: true, message: '请再次输入密码!' },
-                checkPasswordValidator,
+                ({ getFieldValue }) => ({
+                  validator(rule, value) {
+                    if (!value || value === getFieldValue('password')) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject('两次密码输入不一致');
+                  },
+                }),
               ]}
               name="checkPassword"
               label="确认密码"

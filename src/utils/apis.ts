@@ -34,6 +34,10 @@ export const apis: Record<string, Api> = {
     url: '/api/user/changeAvatar',
     method: 'POST',
   },
+  changePassword: {
+    url: '/api/user/changePassword',
+    method: 'POST',
+  },
 };
 
 export default apis;
