@@ -9,18 +9,26 @@ import type { ModelMap } from '@/models';
 import { MoreOutlined } from '@ant-design/icons';
 import type { User } from '@/types/user';
 import { Avatar } from '@/components';
+import { useMemo } from 'react';
 
 interface HeaderUserProps {
-  loading: boolean;
-  userInfo: User | undefined;
+  userModelState: UserModelState;
   onSignIn: () => void;
 }
 
 const HeaderUser: React.FC<HeaderUserProps> = ({
-  loading,
-  userInfo,
+  userModelState,
   onSignIn,
 }) => {
+  const loading = useMemo<boolean>(
+    () =>
+      userModelState.checkSignInLoading || userModelState.getUserInfoLoading,
+    [userModelState.checkSignInLoading, userModelState.getUserInfoLoading],
+  );
+  const userInfo = useMemo<User | undefined>(
+    () => userModelState.userInfo,
+    [userModelState.userInfo],
+  );
   const dispatch = useDispatch();
 
   if (loading) {
@@ -42,6 +50,9 @@ const HeaderUser: React.FC<HeaderUserProps> = ({
         dispatch({
           type: 'user/signOut',
         });
+      },
+      okButtonProps: {
+        danger: true,
       },
     });
   };
@@ -118,11 +129,7 @@ export const Header: React.FC = () => {
         单词记忆器
       </Link>
       <div className={styles.navigator} />
-      <HeaderUser
-        loading={userModelState.checkSignInLoading}
-        onSignIn={openSignInForm}
-        userInfo={userModelState.userInfo}
-      />
+      <HeaderUser userModelState={userModelState} onSignIn={openSignInForm} />
     </Layout.Header>
   );
 };

@@ -4,6 +4,7 @@ import { UserService } from '@/services/user';
 
 export interface UserModelState {
   checkSignInLoading: boolean;
+  getUserInfoLoading: boolean;
   userInfo: User | undefined;
 }
 
@@ -11,6 +12,7 @@ export const userModel: Model<UserModelState> = {
   namespace: 'user',
   state: {
     checkSignInLoading: false,
+    getUserInfoLoading: false,
     userInfo: undefined,
   },
   reducers: {
@@ -22,6 +24,9 @@ export const userModel: Model<UserModelState> = {
     },
     clearUserInfo(state) {
       return { ...state, userInfo: undefined };
+    },
+    setGetUserInfoLoading(state, { payload }) {
+      return { ...state, getUserInfoLoading: payload };
     },
   },
   effects: {
@@ -56,26 +61,34 @@ export const userModel: Model<UserModelState> = {
           payload: true,
         });
         yield UserService.checkSignIn();
-        const userInfo = yield UserService.getUserInfo();
-
-        yield put({
-          type: 'setUserInfo',
-          payload: userInfo,
-        });
         yield put({
           type: 'setCheckSignInLoading',
           payload: false,
         });
-      } catch (error) {
         yield put({
-          type: 'setUserInfo',
-          payload: undefined,
+          type: 'getUserInfo',
         });
+      } catch (error) {
         yield put({
           type: 'setCheckSignInLoading',
           payload: false,
         });
       }
+    },
+    *getUserInfo({}, { put }) {
+      yield put({
+        type: 'setGetUserInfoLoading',
+        payload: true,
+      });
+      const userInfo = yield UserService.getUserInfo();
+      yield put({
+        type: 'setUserInfo',
+        payload: userInfo,
+      });
+      yield put({
+        type: 'setGetUserInfoLoading',
+        payload: false,
+      });
     },
     *signOut({}, { put }) {
       yield put({
@@ -83,9 +96,12 @@ export const userModel: Model<UserModelState> = {
       });
       localStorage.removeItem('accessToken');
     },
-    *changeAvatar({ payload }) {
+    *changeAvatar({ payload }, { put }) {
       try {
         yield UserService.changeAvatar(payload);
+        yield put({
+          type: 'getUserInfo',
+        });
       } catch (error) {}
     },
   },

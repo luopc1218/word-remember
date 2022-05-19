@@ -30,6 +30,7 @@ export const SignInForm: React.FC<FormComponentProps> = ({ formProps }) => {
         icon: null,
         okText: '立即注册',
         closable: true,
+        width: 550,
       },
       'signUpForm',
     );

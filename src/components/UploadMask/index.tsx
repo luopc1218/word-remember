@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import styles from './index.less';
 import { LoadingOutlined } from '@ant-design/icons';
+import type { UploadProps } from 'antd';
 import { Space } from 'antd';
 import { Upload } from '@/components';
 
 interface UploadMaskProps {
   mask?: boolean;
   title?: string;
+  uploadOptions?: UploadProps;
   onSuccess?: (url: string) => void;
 }
 
@@ -14,6 +16,7 @@ export const UploadMask: React.FC<UploadMaskProps> = ({
   mask = true,
   title = '点击上传',
   onSuccess,
+  uploadOptions,
   children,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -24,6 +27,7 @@ export const UploadMask: React.FC<UploadMaskProps> = ({
         maxCount={1}
         disabled={loading}
         showUploadList={false}
+        {...uploadOptions}
         onChange={(e) => {
           console.log(e);
 
