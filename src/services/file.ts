@@ -8,6 +8,7 @@ export const fileService: Service = {
     formData.append('file', file);
     const url = await request(apis.uploadFile, formData, {
       showErrorMessage: false,
+      showSuccessMessage: false,
     });
     return url;
   },

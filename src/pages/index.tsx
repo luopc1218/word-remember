@@ -8,7 +8,7 @@ interface Mode {
 }
 
 export const IndexPage = () => {
-  usePage({ pagePath: [{ title: '主页', path: '/' }] });
+  usePage({ pagePath: [] });
   const modes: Mode[] = [
     {
       modeName: '词库管理',
@@ -21,7 +21,7 @@ export const IndexPage = () => {
   ];
 
   return (
-    <div className={`page ${styles.indexPage}`}>
+    <div className={`page module ${styles.indexPage}`}>
       <h1>欢迎使用单词记忆器</h1>
       <div className={styles.indexPage.modeList}>
         {modes.map((item) => (

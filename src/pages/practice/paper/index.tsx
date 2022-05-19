@@ -40,7 +40,7 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
   const [finished, setFinished] = useState<boolean>(false);
 
   return (
-    <div className={styles.paper}>
+    <div className={`page module ${styles.paper}`}>
       <Divider>
         <Space>
           <div>词库id：{lexiconId}</div>

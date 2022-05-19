@@ -24,6 +24,7 @@ export const Upload: React.FC<UploadProps> = ({
             message: '图片上传中，请稍后',
             description: <Progress percent={progress} status="active" />,
             duration: 0,
+            placement: 'bottomRight',
           });
         };
         openUploadNotification(0);
@@ -46,6 +47,7 @@ export const Upload: React.FC<UploadProps> = ({
             key: uploadNotificationKey,
             message: '上传成功',
             description: <Progress percent={100} status="success" />,
+            placement: 'bottomRight',
           });
           e.onSuccess?.(res);
         } catch (error: any) {
@@ -55,6 +57,7 @@ export const Upload: React.FC<UploadProps> = ({
             message: '上传失败，请稍后重试',
             description: <Progress percent={progress} status="exception" />,
             duration: 0,
+            placement: 'bottomRight',
           });
           e.onError?.(error);
         }

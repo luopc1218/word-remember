@@ -1,9 +1,10 @@
 import styles from './index.less';
 import { Header, Footer } from '@/components';
-import { Affix, Layout, ConfigProvider, Modal } from 'antd';
+import { Affix, Layout, ConfigProvider, Modal, Breadcrumb } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { useCallback, useEffect } from 'react';
-import { useDispatch } from 'umi';
+import type { GlobalModelState, ModelMap } from 'umi';
+import { useDispatch, useSelector, Link } from 'umi';
 
 declare global {
   interface Window {
@@ -13,7 +14,9 @@ declare global {
 
 export const LayoutContainer: React.FC = ({ children }) => {
   const dispatch = useDispatch();
-
+  const globalModelState = useSelector<ModelMap, GlobalModelState>(
+    (state) => state.global,
+  );
   const [modal, contextHolder] = Modal.useModal();
 
   const initApp = useCallback(() => {
@@ -37,11 +40,18 @@ export const LayoutContainer: React.FC = ({ children }) => {
           <Header />
         </Affix>
         <Layout.Content className={styles.content}>
-          {/* <Breadcrumb className={styles.breadcrumb}>
+          <Breadcrumb className={styles.breadcrumb}>
             <Breadcrumb.Item>
-              <a href="/">主页</a>
+              <Link to="/">主页</Link>
             </Breadcrumb.Item>
-          </Breadcrumb> */}
+            {globalModelState.titlePath.map((path) => {
+              return (
+                <Breadcrumb.Item key={path.path}>
+                  <Link to={path.path}>{path.title}</Link>
+                </Breadcrumb.Item>
+              );
+            })}
+          </Breadcrumb>
           {children}
         </Layout.Content>
         <Footer />

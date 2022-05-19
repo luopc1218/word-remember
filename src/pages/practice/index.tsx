@@ -3,6 +3,7 @@ import { Divider, Card, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ModelMap } from '@/models';
 import type { LexiconsModelState } from '@/models/lexicons';
+import { usePage } from '@/hooks';
 
 export type PracticePageProps = LexiconsModelState;
 
@@ -11,8 +12,11 @@ export const PracticePage = connect<LexiconsModelState, {}, {}, ModelMap>(
     return state.lexicons;
   },
 )(({ lexiconList, temporary }: PracticePageProps) => {
+  usePage({
+    pagePath: [{ path: '/practice', title: '练习' }],
+  });
   return (
-    <div className="practicePage">
+    <div className="practicePage page module">
       <Divider>内置词库</Divider>
       <Space>
         <Card>

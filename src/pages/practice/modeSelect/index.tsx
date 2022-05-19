@@ -11,7 +11,7 @@ export const ModeSelectPage = () => {
   const [shuffle, setShuffle] = useState<boolean>(false);
 
   return (
-    <div>
+    <div className="page module">
       <Divider>选择练习模式</Divider>
       <Radio.Group onChange={(e) => setType(e.target.value)} value={type}>
         <Radio.Button value="1">英译汉</Radio.Button>

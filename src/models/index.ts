@@ -42,7 +42,7 @@ export const globalModel: Model<GlobalModelState> = {
       document.title = yield select((state: ModelMap) => {
         return (
           state.global?.sysConfig?.title +
-          '-' +
+          (state.global.titlePath.length > 0 ? '-' : '') +
           state.global.titlePath
             .map((item: { path: string; title: string }) => item.title)
             .join('-')

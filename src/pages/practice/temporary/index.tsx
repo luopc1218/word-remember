@@ -205,7 +205,7 @@ export const TemporaryPage = connect(
   );
 
   return (
-    <div>
+    <div className="page module">
       <Alert message="警告！清空浏览器缓存会导致临时词库丢失！" type="error" />
       <Table {...tableProps} />
       <Divider></Divider>

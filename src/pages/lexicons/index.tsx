@@ -1,17 +1,14 @@
 import { Tabs } from 'antd';
 import { useCallback } from 'react';
-import { connect } from 'umi';
-import type { LexiconsModelState } from '@/models/lexicons';
-import type { ModelMap } from '@/models';
+import type { LexiconsModelState, ModelMap } from 'umi';
+import { useSelector } from 'umi';
 import { usePage } from '@/hooks';
+import styles from './index.less';
 
-interface MapStateToHeaderProps {
-  lexicons: LexiconsModelState;
-}
-
-interface LexiconsPageProps extends MapStateToHeaderProps {}
-
-export const LexiconsPage: React.FC<LexiconsPageProps> = ({ lexicons }) => {
+export const LexiconsPage: React.FC = () => {
+  const lexiconsModelState = useSelector<ModelMap, LexiconsModelState>(
+    (state) => state.lexicons,
+  );
   usePage({ pagePath: [{ path: '/lexicons', title: '词库管理' }] });
   const handleChangeLexicons = useCallback((e, t) => {
     switch (t) {
@@ -23,12 +20,9 @@ export const LexiconsPage: React.FC<LexiconsPageProps> = ({ lexicons }) => {
   }, []);
 
   return (
-    <div>
-      <div>
-        <h1>词库管理</h1>
-      </div>
+    <div className={`page module ${styles.lexiconsPage}`}>
       <Tabs type="editable-card" onEdit={handleChangeLexicons}>
-        {lexicons.lexiconList.map(() => (
+        {lexiconsModelState.lexiconList.map(() => (
           <Tabs.TabPane tab="Tab 1">Content of Tab Pane 1</Tabs.TabPane>
         ))}
       </Tabs>
@@ -36,13 +30,4 @@ export const LexiconsPage: React.FC<LexiconsPageProps> = ({ lexicons }) => {
   );
 };
 
-export const LexiconsPageWithConnect = connect<
-  MapStateToHeaderProps,
-  {},
-  {},
-  ModelMap
->((state) => ({
-  lexicons: state.lexicons,
-}))(LexiconsPage);
-
-export default LexiconsPageWithConnect;
+export default LexiconsPage;

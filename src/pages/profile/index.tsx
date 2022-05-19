@@ -18,6 +18,7 @@ import { useMemo, useCallback } from 'react';
 import { usePage } from '@/hooks';
 import type { ChangePasswordFormData } from '@/components/FormModal';
 import { ChangePasswordForm } from '@/components/FormModal';
+import { LexiconsTable } from './components';
 
 export const ProfilePage = () => {
   const userModelState = useSelector<ModelMap, UserModelState>(
@@ -99,7 +100,7 @@ export const ProfilePage = () => {
                 />
               </UploadMask>
             </Space>
-            <Descriptions title={userInfo.name}>
+            <Descriptions title={userInfo.name} className={styles.summary}>
               <Descriptions.Item label="电话">
                 {userInfo.phone}
               </Descriptions.Item>
@@ -112,27 +113,7 @@ export const ProfilePage = () => {
         <div className={`module ${styles.details}`}>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="我的词库" key="lexicons">
-              <Table
-                bordered
-                dataSource={[]}
-                columns={[
-                  {
-                    title: '姓名',
-                    dataIndex: 'name',
-                    key: 'name',
-                  },
-                  {
-                    title: '年龄',
-                    dataIndex: 'age',
-                    key: 'age',
-                  },
-                  {
-                    title: '住址',
-                    dataIndex: 'address',
-                    key: 'address',
-                  },
-                ]}
-              />
+              <LexiconsTable />
             </Tabs.TabPane>
             <Tabs.TabPane tab="我的练习" key="practice">
               <Table

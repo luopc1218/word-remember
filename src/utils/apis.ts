@@ -38,6 +38,10 @@ export const apis: Record<string, Api> = {
     url: '/api/user/changePassword',
     method: 'POST',
   },
+  getUserLexicons: {
+    url: '/api/lexicons/getUserLexicons',
+    method: 'GET',
+  },
 };
 
 export default apis;
