@@ -2,11 +2,7 @@
   "private": true,
   "scripts": {
     "start": "umi dev",
-    "build": "umi build",
-    "postinstall": "umi generate tmp",
-    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
-    "test": "umi-test",
-    "test:coverage": "umi-test --coverage"
+    "build": "git pull && npm i -prod && umi build && docker build -t word-remember:latest . && docker run -d --rm -p 8001:80 --name word-remember word-remember"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
