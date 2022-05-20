@@ -8,21 +8,17 @@
 Install dependencies,
 
 ```bash
-$ yarn
+$ npm i
 ```
 
 Start the dev server,
 
 ```bash
-$ yarn start
+$ npm run start
 ```
 
-## Docker
+Build
 
-```shell
-# build docker
-sudo docker build --force-rm -t word-remember:latest .
-
-# run docker 
-docker run -d --rm -p 8001:80 --name word-remember word-remember
+```bash
+$ npm run build
 ```
