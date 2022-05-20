@@ -2,9 +2,8 @@
   "private": true,
   "scripts": {
     "start": "umi dev",
-    "build": "git pull && npm i -prod && umi build && npm run docker build && npm run docker run",
-    "docker:build":"docker build -t word-remember:latest .",
-    "docker:run":"docker run -d --rm -p %npm_config_port%:80 --name word-remember word-remember"
+    "build": "git pull && npm i -prod && umi build && npm run docker build",
+    "docker:build":"docker build -t word-remember:latest ."
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
