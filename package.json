@@ -4,7 +4,7 @@
     "start": "umi dev",
     "build": "git pull && npm i -prod && umi build && npm run docker build && npm run docker run",
     "docker:build":"docker build -t word-remember:latest .",
-    "docker:run":"docker run -d --rm -p 8001:80 --name word-remember word-remember"
+    "docker:run":"docker run -d --rm -p %npm_config_port%:80 --name word-remember word-remember"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
