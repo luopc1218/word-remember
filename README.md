@@ -1,7 +1,7 @@
 # umi project
 
 ## Example
-[单词记忆器](http://1.117.173.27/)
+[单词记忆器](http://106.52.172.134:8001)
 
 ## Getting Started
 
