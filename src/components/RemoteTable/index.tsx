@@ -9,20 +9,25 @@ interface RemoteTableProps extends TableProps<any> {
 }
 
 interface TableData {
-  data: any[];
+  list: any[];
   totalcount: number;
 }
 
 export const RemoteTable: React.FC<RemoteTableProps> = ({
   api,
   params,
-  columns,
+  ...rest
 }) => {
-  const [fetchData = { data: [], totalcount: 0 }, getFetchLoading] =
+  const [data = { list: [], totalcount: 0 }, getFetchLoading] =
     useFetch<TableData>(api, params);
-  const { data } = fetchData;
+  const { list } = data;
   return (
-    <Table loading={getFetchLoading} dataSource={data} columns={columns} />
+    <Table
+      loading={getFetchLoading}
+      dataSource={list}
+      pagination={false}
+      {...rest}
+    />
   );
 };
 

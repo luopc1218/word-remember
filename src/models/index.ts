@@ -1,6 +1,5 @@
 import { globalService } from '@/services';
 import type { ImmerReducer, Effect } from 'umi';
-import type { LexiconsModelState } from './lexicons';
 import type { UserModelState } from './user';
 
 export interface Model<T> {
@@ -12,7 +11,6 @@ export interface Model<T> {
 
 export interface ModelMap {
   global: GlobalModelState;
-  lexicons: LexiconsModelState;
   user: UserModelState;
 }
 

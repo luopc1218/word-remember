@@ -1,1 +1,1 @@
-export * from './LexiconsTable';
+export * from './Lexicons';

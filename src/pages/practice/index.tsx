@@ -1,17 +1,9 @@
-import { connect, Link } from 'umi';
+import { Link } from 'umi';
 import { Divider, Card, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import type { ModelMap } from '@/models';
-import type { LexiconsModelState } from '@/models/lexicons';
 import { usePage } from '@/hooks';
 
-export type PracticePageProps = LexiconsModelState;
-
-export const PracticePage = connect<LexiconsModelState, {}, {}, ModelMap>(
-  (state) => {
-    return state.lexicons;
-  },
-)(({ lexiconList, temporary }: PracticePageProps) => {
+export const PracticePage = () => {
   usePage({
     pagePath: [{ path: '/practice', title: '练习' }],
   });
@@ -33,15 +25,12 @@ export const PracticePage = connect<LexiconsModelState, {}, {}, ModelMap>(
       <Space>
         <Link to="/practice/temporary">
           <Card>
-            <div>
-              <div>{temporary.title}</div>
-              <div>单词数：{temporary.wordList.length}</div>
-            </div>
+            <div></div>
           </Card>
         </Link>
       </Space>
     </div>
   );
-});
+};
 
 export default PracticePage;

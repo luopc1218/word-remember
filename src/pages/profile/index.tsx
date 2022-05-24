@@ -18,7 +18,7 @@ import { useMemo, useCallback } from 'react';
 import { usePage } from '@/hooks';
 import type { ChangePasswordFormData } from '@/components/FormModal';
 import { ChangePasswordForm } from '@/components/FormModal';
-import { LexiconsTable } from './components';
+import { Lexicons } from './components';
 
 export const ProfilePage = () => {
   const userModelState = useSelector<ModelMap, UserModelState>(
@@ -113,7 +113,7 @@ export const ProfilePage = () => {
         <div className={`module ${styles.details}`}>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="我的词库" key="lexicons">
-              <LexiconsTable />
+              <Lexicons />
             </Tabs.TabPane>
             <Tabs.TabPane tab="我的练习" key="practice">
               <Table

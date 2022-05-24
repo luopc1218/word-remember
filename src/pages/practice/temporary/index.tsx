@@ -1,10 +1,9 @@
-import { connect, Link } from 'umi';
+import { Link } from 'umi';
 import type { Lexicon } from '@/types/lexcion';
 import type { TableProps } from 'antd';
 import { Table, Input, Button, Popconfirm, Space, Alert, Divider } from 'antd';
 import type { Word } from '@/types/lexcion';
 import { useCallback, useMemo, useState } from 'react';
-import type { LexiconsModelState } from '@/models/lexicons';
 import { Dictvoice, WordImporter } from '@/components';
 
 interface TemporaryPageProps {
@@ -19,33 +18,12 @@ interface NewWord extends Word {
   index?: number;
 }
 
-export const TemporaryPage = connect(
-  (state: { lexicons: LexiconsModelState }) => {
-    return {
-      temporary: state.lexicons.temporary,
-    };
-  },
-  (dispatch) => {
-    return {
-      addNewWord: (newWord: NewWord) =>
-        dispatch({
-          type: 'lexicons/addNewWordToTemporary',
-          payload: newWord,
-        }),
-      deleteWord(wordIndex: number) {
-        dispatch({
-          type: 'lexicons/deleteWordFromTemporary',
-          payload: wordIndex,
-        });
-      },
-      clearWords() {
-        dispatch({
-          type: 'lexicons/cleanTemporary',
-        });
-      },
-    };
-  },
-)(({ temporary, addNewWord, deleteWord, clearWords }: TemporaryPageProps) => {
+export const TemporaryPage = ({
+  temporary,
+  addNewWord,
+  deleteWord,
+  clearWords,
+}: TemporaryPageProps) => {
   const [newWord, setNewWord] = useState<NewWord>({
     word: '',
     phonetic: '',
@@ -218,6 +196,6 @@ export const TemporaryPage = connect(
       </div>
     </div>
   );
-});
+};
 
 export default TemporaryPage;

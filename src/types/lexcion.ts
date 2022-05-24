@@ -5,6 +5,9 @@ export interface Word {
 }
 
 export interface Lexicon {
-  title: string;
-  wordList: Word[];
+  id: number;
+  name: string;
+  ownerId: number;
+  cover: string;
+  description: string;
 }

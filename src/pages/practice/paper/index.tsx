@@ -2,28 +2,19 @@ import { useUrlParams } from '@/hooks';
 import styles from './index.less';
 import { Divider, Space, Input, Button } from 'antd';
 import { useMemo, useState } from 'react';
-import { connect, Link } from 'umi';
-import type { LexiconsModelState } from '@/models/lexicons';
-import type { Lexicon } from '@/types/lexcion';
+import { Link } from 'umi';
 import _ from 'lodash';
 import { Result } from './components';
 
-export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
-  temporary: state.lexicons.temporary,
-}))((props) => {
-  const { temporary } = props;
+export const Paper = () => {
   const [urlParams] = useUrlParams();
   const { lexiconId, type, shuffle } = urlParams;
 
   const isWordToMeaning = useMemo<boolean>(() => type === '1', [type]);
 
-  const currentLexicon = useMemo<Lexicon>(() => {
-    if (lexiconId === '0') {
-      return temporary;
-    } else {
-      return temporary;
-    }
-  }, [lexiconId, temporary]);
+  const currentLexicon = {
+    wordList: [],
+  };
 
   const wordList = useMemo(
     () =>
@@ -114,6 +105,6 @@ export const Paper = connect((state: { lexicons: LexiconsModelState }) => ({
       </Space>
     </div>
   );
-});
+};
 
 export default Paper;
