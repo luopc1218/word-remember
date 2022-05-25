@@ -1,10 +1,16 @@
 export interface Word {
-  word: string;
+  id: number;
+  lexiconsId: number;
+  original: string;
   phonetic: string;
   meaning: string;
 }
 
 export interface Lexicon {
-  title: string;
-  wordList: Word[];
+  id: number;
+  name: string;
+  onwerId: number;
+  cover: string;
+  description: string;
+  type: 0 | 1 | 2;
 }
